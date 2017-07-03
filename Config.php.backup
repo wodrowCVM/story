@@ -2,5 +2,6 @@
 
 class Config
 {
-
+    public static $frontendUrl = "http://frontend.story.deepin.me.tt/";
+    public static $storageUrl = "http://storage.story.deepin.me.tt/";
 }
