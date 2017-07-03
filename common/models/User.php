@@ -25,7 +25,7 @@ class User extends \common\models\tables\User implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
+    const STATUS_INACTIVE = 9;
 
     /**
      * @inheritdoc
@@ -51,8 +51,7 @@ class User extends \common\models\tables\User implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
         ];
     }
 

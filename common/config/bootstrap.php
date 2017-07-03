@@ -7,3 +7,4 @@ Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 Yii::setAlias('@data', dirname(dirname(__DIR__)) . '/data');
 
 require_once Yii::getAlias('@project')."/Config.php";
+define(NOW_TIME, time());

@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use yii\base\ErrorException;
 use yii\base\Model;
 use common\models\User;
 
@@ -9,16 +10,20 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
-    public $username;
     public $email;
+    public $code;
+    public $username;
     public $password;
+    public $repassword;
 
     public function attributeLabels()
     {
         return [
-            'username' => "用户名",
             'email' => '邮箱',
+            'code' => '验证码',
+            'username' => "用户名",
             'password' => '密码',
+            'repassword' => '确认密码',
         ];
     }
 
@@ -30,17 +35,23 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            ['repassword', 'required'],
+            ['repassword', 'compare', 'compareAttribute' => 'password'],
+
+//            ['code', 'required'],
+//            ['code', 'captcha'],
         ];
     }
 
@@ -59,6 +70,22 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        return $user->save() ? $user : null;
+        \Yii::$app->cache->set($user->username."_signup_active_key", \Yii::$app->security->generateRandomKey(), 3600);
+        $is_send = \Yii::$app->mailer
+            ->compose(['html'=>'signup'], ['url'=>\yii\helpers\Url::toRoute(['site/set-active', 'username'=>$user->username, 'code'=>\Yii::$app->cache->get($user->username."_signup_active_key")], true)])
+            ->setFrom(\Config::$adminEmail)
+            ->setTo($user->email)
+            ->setSubject("注册激活用户")
+            ->send();
+        if ($is_send){
+            if ($user->save()){
+                return $user;
+            }else{
+                \Yii::$app->session->setFlash('error', '用户注册失败。');
+            }
+        }else{
+            \Yii::$app->session->setFlash('error', '邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱。');
+//            throw new ErrorException("邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱", 1001);
+        }
     }
 }

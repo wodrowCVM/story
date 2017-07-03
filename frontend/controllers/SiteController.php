@@ -72,14 +72,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $is_send = Yii::$app->mailer->compose(['text' => 'signup'],
-            ['code' => 123456])->setFrom('1173957281@qq.com')->setTo("1173957281@qq.com")->setSubject("test")->send();
-        if ($is_send){
-            echo 1;
-        }else{
-            echo 0;
-        }
-//        return $this->render('index');
+        return $this->render('index');
     }
 
     /**
@@ -123,14 +116,21 @@ class SiteController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->user->login($user)) {
-                    return $this->goHome();
-                }
+                Yii::$app->session->setFlash('success', "恭喜你[".$user->username."]已经注册成功，请进入邮箱激活后登录");
+                return $this->redirect(['login']);
+            }else{
+                Yii::$app->session->getFlash('error');
             }
         }
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionSetActive($username, $code)
+    {
+        var_dump(Yii::$app->cache->get($username."_signup_active_key"));
+        var_dump($code);
     }
 
     /**
