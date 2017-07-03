@@ -8,7 +8,12 @@
 
 namespace common\components\rewrite;
 
-
+/**
+ * Class User
+ * @package common\components\rewrite
+ *
+ * @property \common\models\User $identity
+ */
 class User extends \yii\web\User
 {
 

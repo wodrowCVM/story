@@ -13,6 +13,14 @@ class SignupForm extends Model
     public $email;
     public $password;
 
+    public function attributeLabels()
+    {
+        return [
+            'username' => "用户名",
+            'email' => '邮箱',
+            'password' => '密码',
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -46,13 +54,11 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        
         return $user->save() ? $user : null;
     }
 }
