@@ -11,10 +11,20 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $code;
     public $rememberMe = true;
 
     private $_user;
 
+    public function attributeLabels()
+    {
+        return [
+            'username' => '用户名',
+            'password' => '密码',
+            'code' => '验证码',
+            'rememberMe' => '记住我',
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -22,12 +32,11 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
             [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            ['code', 'required'],
+            ['code', 'captcha'],
+            ['username', 'validatePassword'],
         ];
     }
 
@@ -41,9 +50,12 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
+            $user = User::findOne(['username'=>$this->username]);
+            if ($user->status == $user::STATUS_INACTIVE){
+                $this->addError($attribute, '没有激活，请先激活');
+            }
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, '账号或密码错误');
             }
         }
     }

@@ -11,7 +11,15 @@ use common\models\User;
 class PasswordResetRequestForm extends Model
 {
     public $email;
+    public $code;
 
+    public function attributeLabels()
+    {
+        return [
+            'email' => '邮箱',
+            'code' => '验证码',
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -25,8 +33,10 @@ class PasswordResetRequestForm extends Model
             ['email', 'exist',
                 'targetClass' => '\common\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'There is no user with this email address.'
+                'message' => '没有找到邮箱或邮箱未激活。'
             ],
+            ['code', 'required'],
+            ['code', 'captcha'],
         ];
     }
 
@@ -59,7 +69,7 @@ class PasswordResetRequestForm extends Model
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
             ->setTo($this->email)
-            ->setSubject('Password reset for ' . Yii::$app->name)
+            ->setSubject('重置密码 ' . Yii::$app->name)
             ->send();
     }
 }

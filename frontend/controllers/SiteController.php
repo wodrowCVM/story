@@ -1,7 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
+use frontend\models\ActiveForEmailForm;
 use Yii;
+use yii\base\ErrorException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -127,10 +130,71 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionActiveForEmail()
+    {
+        $model = new ActiveForEmailForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $user = User::findOne(['email'=>$model->email]);
+            if (!$user){
+                throw new ErrorException("没有找到用户", 1002);
+            }
+            if ($user->status == $user::STATUS_ACTIVE){
+                Yii::$app->session->setFlash('success', "已经激活的用户");
+                return $this->redirect(['login']);
+            }
+            \Yii::$app->cache->set($user->username."_signup_active_key", \Yii::$app->security->generateRandomKey(), 3600);
+            $is_send = \Yii::$app->mailer
+                ->compose(['html'=>'signup'], ['url'=>\yii\helpers\Url::toRoute(['site/set-active', 'username'=>$user->username, 'code'=>\Yii::$app->cache->get($user->username."_signup_active_key")], true)])
+                ->setFrom(\Config::$adminEmail)
+                ->setTo($user->email)
+                ->setSubject("激活用户")
+                ->send();
+            if ($is_send){
+                if ($user->save()){
+                    \Yii::$app->session->setFlash('success', '激活链接发送成功，请进入邮箱激活。');
+                }else{
+                    \Yii::$app->session->setFlash('error', '用户激活失败。');
+                }
+            }else{
+                \Yii::$app->session->setFlash('error', '邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱。');
+            }
+            return $this->redirect(['login']);
+        }
+        return $this->render('active-for-email', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * set active
+     * @param $username
+     * @param $code
+     * @return \yii\web\Response
+     * @throws ErrorException
+     */
     public function actionSetActive($username, $code)
     {
-        var_dump(Yii::$app->cache->get($username."_signup_active_key"));
-        var_dump($code);
+        $user = User::findOne(['username'=>$username]);
+        if (!$user){
+            throw new ErrorException("没有找到用户", 1002);
+        }
+        if ($user->status == $user::STATUS_ACTIVE){
+            Yii::$app->session->setFlash('success', "已经激活的用户");
+            return $this->redirect(['login']);
+        }
+        if (Yii::$app->cache->get($user->username."_signup_active_key") == $code){
+            $user->status = $user::STATUS_ACTIVE;
+            if ($user->save()){
+                Yii::$app->session->setFlash('success', "恭喜你[".$user->username."]已经激活成功");
+                Yii::$app->cache->delete($user->username."_signup_active_key");
+                if (Yii::$app->user->login($user)){
+                    return $this->redirect(['index']);
+                }
+            }
+        }else{
+            Yii::$app->session->setFlash('error', "激活失败,你的激活码可能已经过期");
+            return $this->redirect(['login']);
+        }
     }
 
     /**
@@ -143,10 +207,10 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-                return $this->goHome();
+                Yii::$app->session->setFlash('success', '发送成功，检查你的邮箱重置密码。');
+//                return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error', '对不起，没有找到邮箱，发送失败。请检查你的邮箱！');
             }
         }
         return $this->render('requestPasswordResetToken', [
@@ -169,9 +233,8 @@ class SiteController extends Controller
             throw new BadRequestHttpException($e->getMessage());
         }
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
-
-            return $this->goHome();
+            Yii::$app->session->setFlash('success', '新的密码已经保存成功.');
+            return $this->redirect(['login']);
         }
         return $this->render('resetPassword', [
             'model' => $model,

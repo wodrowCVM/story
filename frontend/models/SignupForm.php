@@ -50,8 +50,8 @@ class SignupForm extends Model
             ['repassword', 'required'],
             ['repassword', 'compare', 'compareAttribute' => 'password'],
 
-//            ['code', 'required'],
-//            ['code', 'captcha'],
+            ['code', 'required'],
+            ['code', 'captcha'],
         ];
     }
 

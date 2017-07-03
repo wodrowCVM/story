@@ -11,6 +11,17 @@ use common\models\User;
 class ResetPasswordForm extends Model
 {
     public $password;
+    public $repassword;
+    public $code;
+
+    public function attributeLabels()
+    {
+        return [
+            'password' => '密码',
+            'repassword' => '确认密码',
+            'code' => '验证码',
+        ];
+    }
 
     /**
      * @var \common\models\User
@@ -45,6 +56,10 @@ class ResetPasswordForm extends Model
         return [
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+            ['repassword', 'required'],
+            ['repassword', 'compare', 'compareAttribute' => 'password'],
+            ['code', 'required'],
+            ['code', 'captcha'],
         ];
     }
 
