@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use common\models\UserAuthCode;
 use yii\base\ErrorException;
 use yii\base\Model;
 use common\models\User;
@@ -10,6 +11,7 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
+    public $authcode;
     public $email;
     public $code;
     public $username;
@@ -19,6 +21,7 @@ class SignupForm extends Model
     public function attributeLabels()
     {
         return [
+            'authcode' => '授权码',
             'email' => '邮箱',
             'code' => '验证码',
             'username' => "用户名",
@@ -33,6 +36,13 @@ class SignupForm extends Model
     public function rules()
     {
         return [
+            ['authcode', 'required'],
+            ['authcode', 'exist',
+                'targetAttribute' => 'code',
+                'targetClass' => '\common\models\UserAuthCode',
+                'filter' => ['status' => UserAuthCode::STATUS_ACTIVE],
+                'message' => '没有找到授权码或未激活的授权码。'],
+
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'unique', 'targetClass' => '\common\models\User'],

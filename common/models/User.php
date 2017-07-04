@@ -45,6 +45,21 @@ class User extends \common\models\tables\User implements IdentityInterface
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'id' => '用户编号',
+            'username' => '用户名',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => '邮箱',
+            'status' => '状态',
+            'created_at' => '注册时间',
+            'updated_at' => '修改时间',
+        ];
+    }
+
     /**
      * @inheritdoc
      */
