@@ -75,7 +75,6 @@ class AuthCodeController extends Controller
     public function actionCreate()
     {
         $model = new UserAuthCode();
-
         if ($model->loadAll(Yii::$app->request->post()) && $model->saveAll()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

@@ -18,8 +18,8 @@ use backend\modules\user\models\UserAuthCode;
     public function rules()
     {
         return [
-            [['id', 'bind_user', 'bind_at', 'created_by', 'created_at', 'updated_by', 'updated_at', 'status'], 'integer'],
-            [['code'], 'safe'],
+            [['id', 'bind_user', 'created_by', 'updated_by', 'status'], 'integer'],
+            [['bind_at', 'created_at', 'updated_at', 'code'], 'safe'],
         ];
     }
 
@@ -28,7 +28,6 @@ use backend\modules\user\models\UserAuthCode;
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -42,32 +41,33 @@ use backend\modules\user\models\UserAuthCode;
     public function search($params)
     {
         $query = UserAuthCode::find();
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
         $this->load($params);
-
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
-
         $query->andFilterWhere([
             'id' => $this->id,
             'bind_user' => $this->bind_user,
-            'bind_at' => $this->bind_at,
             'created_by' => $this->created_by,
-            'created_at' => $this->created_at,
             'updated_by' => $this->updated_by,
-            'updated_at' => $this->updated_at,
             'status' => $this->status,
         ]);
-
+        if ( ! is_null($this->bind_at) && strpos($this->bind_at, ' - ') !== false ) {
+            list($start_date, $end_date) = explode(' - ', $this->bind_at);
+            $query->andFilterWhere(['between', 'created_at', strtotime($start_date), strtotime($end_date.' 23:59:59')]);
+        }
+        if ( ! is_null($this->created_at) && strpos($this->created_at, ' - ') !== false ) {
+            list($start_date, $end_date) = explode(' - ', $this->created_at);
+            $query->andFilterWhere(['between', 'created_at', strtotime($start_date), strtotime($end_date.' 23:59:59')]);
+        }
+        if ( ! is_null($this->updated_at) && strpos($this->updated_at, ' - ') !== false ) {
+            list($start_date, $end_date) = explode(' - ', $this->updated_at);
+            $query->andFilterWhere(['between', 'updated_at', strtotime($start_date), strtotime($end_date.' 23:59:59')]);
+        }
         $query->andFilterWhere(['like', 'code', $this->code]);
-
         return $dataProvider;
     }
 }

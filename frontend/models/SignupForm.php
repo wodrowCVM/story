@@ -80,7 +80,7 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        \Yii::$app->cache->set($user->username."_signup_active_key", \Yii::$app->security->generateRandomKey(), 3600);
+        \Yii::$app->cache->set($user->username."_signup_active_key", \Yii::$app->security->generateRandomString(), 3600);
         $is_send = \Yii::$app->mailer
             ->compose(['html'=>'signup'], ['url'=>\yii\helpers\Url::toRoute(['site/set-active', 'username'=>$user->username, 'code'=>\Yii::$app->cache->get($user->username."_signup_active_key")], true)])
             ->setFrom(\Config::$adminEmail)

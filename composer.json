@@ -22,7 +22,8 @@
         "dmstr/yii2-adminlte-asset": "2.*",
         "mootensai/yii2-enhanced-gii": "dev-master",
         "kartik-v/yii2-tree-manager": "dev-master",
-        "kartik-v/yii2-mpdf": "^1.0"
+        "kartik-v/yii2-mpdf": "^1.0",
+        "kartik-v/yii2-date-range": "^1.6"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

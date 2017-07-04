@@ -8,87 +8,129 @@ use yii\helpers\Html;
 use kartik\export\ExportMenu;
 use kartik\grid\GridView;
 
-$this->title = 'User Auth Codes';
+$this->title = '授权码列表';
 $this->params['breadcrumbs'][] = $this->title;
-$search = "$('.search-button').click(function(){
-	$('.search-form').toggle(1000);
-	return false;
-});";
-$this->registerJs($search);
 ?>
 <div class="user-auth-code-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create User Auth Code', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Advance Search', '#', ['class' => 'btn btn-info search-button']) ?>
+        <?= Html::a('生成授权码', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div class="search-form" style="display:none">
-        <?=  $this->render('_search', ['model' => $searchModel]); ?>
+        <?= $this->render('_search', ['model' => $searchModel]); ?>
     </div>
-    <?php 
+    <?php
     $gridColumn = [
         ['class' => 'yii\grid\SerialColumn'],
         'id',
         'code',
         [
-                'attribute' => 'bind_user',
-                'label' => 'Bind User',
-                'value' => function($model){
-                    if ($model->bindUser)
-                    {return $model->bindUser->id;}
-                    else
-                    {return NULL;}
-                },
-                'filterType' => GridView::FILTER_SELECT2,
-                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\user\models\User::find()->asArray()->all(), 'id', 'id'),
-                'filterWidgetOptions' => [
-                    'pluginOptions' => ['allowClear' => true],
-                ],
-                'filterInputOptions' => ['placeholder' => 'User', 'id' => 'grid-user-auth-code-search-bind_user']
+            'attribute' => 'bind_user',
+//                'label' => 'Bind User',
+            'value' => function ($model) {
+                if ($model->bindUser) {
+                    return $model->bindUser->username;
+                } else {
+                    return NULL;
+                }
+            },
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\user\models\User::find()->asArray()->all(), 'id', 'username'),
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
             ],
-        'bind_at',
+            'filterInputOptions' => ['placeholder' => '用户', 'id' => 'grid-user-auth-code-search-bind_user']
+        ],
         [
-                'attribute' => 'created_by',
-                'label' => 'Created By',
-                'value' => function($model){                   
-                    return $model->createdBy->id;                   
-                },
-                'filterType' => GridView::FILTER_SELECT2,
-                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\user\models\User::find()->asArray()->all(), 'id', 'id'),
-                'filterWidgetOptions' => [
-                    'pluginOptions' => ['allowClear' => true],
-                ],
-                'filterInputOptions' => ['placeholder' => 'User', 'id' => 'grid-user-auth-code-search-created_by']
-            ],
-        'created_at',
-        [
-                'attribute' => 'updated_by',
-                'label' => 'Updated By',
-                'value' => function($model){                   
-                    return $model->updatedBy->id;                   
-                },
-                'filterType' => GridView::FILTER_SELECT2,
-                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\user\models\User::find()->asArray()->all(), 'id', 'id'),
-                'filterWidgetOptions' => [
-                    'pluginOptions' => ['allowClear' => true],
-                ],
-                'filterInputOptions' => ['placeholder' => 'User', 'id' => 'grid-user-auth-code-search-updated_by']
-            ],
-        'updated_at',
-        'status',
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{save-as-new} {view} {update} {delete}',
-            'buttons' => [
-                'save-as-new' => function ($url) {
-                    return Html::a('<span class="glyphicon glyphicon-copy"></span>', $url, ['title' => 'Save As New']);
-                },
+            'attribute'=>'bind_at',
+            'format' => ['date', 'php:Y-m-d H:i:s'],
+            'filterType' => \kartik\grid\GridView::FILTER_DATE_RANGE,
+            'filterWidgetOptions' =>[
+                'model'=>$searchModel,
+                'attribute'=>'bind_at',
+                'presetDropdown'=>TRUE,
+                'convertFormat'=>true,
+                'pluginOptions'=>[
+                    'format'=>'Y-m-d',
+                    'opens'=>'left',
+                    'locale' => [
+                        'cancelLabel' => 'Clear',
+                        'format' => 'Y-m-d',
+                    ],
+                ]
             ],
         ],
-    ]; 
+        [
+            'attribute' => 'created_by',
+            'value' => function ($model) {
+                return $model->createdBy->username;
+            },
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\user\models\User::find()->asArray()->all(), 'id', 'username'),
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
+            ],
+            'filterInputOptions' => ['placeholder' => '用户', 'id' => 'grid-user-auth-code-search-created_by']
+        ],
+        [
+            'attribute'=>'created_at',
+            'format' => ['date', 'php:Y-m-d H:i:s'],
+            'filterType' => \kartik\grid\GridView::FILTER_DATE_RANGE,
+            'filterWidgetOptions' =>[
+                'model'=>$searchModel,
+                'attribute'=>'created_at',
+                'presetDropdown'=>TRUE,
+                'convertFormat'=>true,
+                'pluginOptions'=>[
+                    'format'=>'Y-m-d',
+                    'opens'=>'left',
+                    'locale' => [
+                        'cancelLabel' => 'Clear',
+                        'format' => 'Y-m-d',
+                    ],
+                ]
+            ],
+        ],
+        [
+            'attribute' => 'updated_by',
+            'value' => function ($model) {
+                return $model->updatedBy->username;
+            },
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\user\models\User::find()->asArray()->all(), 'id', 'username'),
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
+            ],
+            'filterInputOptions' => ['placeholder' => '用户', 'id' => 'grid-user-auth-code-search-updated_by']
+        ],
+        [
+            'attribute'=>'updated_at',
+            'format' => ['date', 'php:Y-m-d H:i:s'],
+            'filterType' => \kartik\grid\GridView::FILTER_DATE_RANGE,
+            'filterWidgetOptions' =>[
+                'model'=>$searchModel,
+                'attribute'=>'updated_at',
+                'presetDropdown'=>TRUE,
+                'convertFormat'=>true,
+                'pluginOptions'=>[
+                    'format'=>'Y-m-d',
+                    'opens'=>'left',
+                    'locale' => [
+                        'cancelLabel' => 'Clear',
+                        'format' => 'Y-m-d',
+                    ],
+                ]
+            ],
+        ],
+        [
+            'class' => \common\components\grid\KEnumColumn::className(),
+            'attribute' => 'status',
+            'enum' => $searchModel::getStatus(),
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+        ],
+    ];
     ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -100,7 +142,6 @@ $this->registerJs($search);
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<span class="glyphicon glyphicon-book"></span>  ' . Html::encode($this->title),
         ],
-        // your toolbar can include the additional full export menu
         'toolbar' => [
             '{export}',
             ExportMenu::widget([
@@ -109,13 +150,13 @@ $this->registerJs($search);
                 'target' => ExportMenu::TARGET_BLANK,
                 'fontAwesome' => true,
                 'dropdownOptions' => [
-                    'label' => 'Full',
+                    'label' => '导出所有',
                     'class' => 'btn btn-default',
                     'itemsBefore' => [
-                        '<li class="dropdown-header">Export All Data</li>',
+                        '<li class="dropdown-header">导出所有数据</li>',
                     ],
                 ],
-            ]) ,
+            ]),
         ],
     ]); ?>
 

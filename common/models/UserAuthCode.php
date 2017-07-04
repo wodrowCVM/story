@@ -11,7 +11,18 @@ namespace common\models;
 
 class UserAuthCode extends \common\models\tables\UserAuthCode
 {
+    const STATUS_DELETE = 0;
+    const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+
+    public static function getStatus()
+    {
+        return [
+            self::STATUS_ACTIVE => '已激活',
+            self::STATUS_DELETE => '已删除',
+            self::STATUS_INACTIVE => '未激活',
+        ];
+    }
 
     public function attributeLabels()
     {
