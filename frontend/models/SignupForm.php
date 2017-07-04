@@ -40,8 +40,8 @@ class SignupForm extends Model
             ['authcode', 'exist',
                 'targetAttribute' => 'code',
                 'targetClass' => '\common\models\UserAuthCode',
-                'filter' => ['status' => UserAuthCode::STATUS_ACTIVE],
-                'message' => '没有找到授权码或未激活的授权码。'],
+                'filter' => ['and', 'status' => UserAuthCode::STATUS_ACTIVE, 'bind_user' => ''],
+                'message' => '没有找到授权码或失效的授权码。'],
 
             ['username', 'trim'],
             ['username', 'required'],

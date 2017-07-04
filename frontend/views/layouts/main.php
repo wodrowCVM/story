@@ -10,6 +10,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
+\kartik\icons\Icon::map($this);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -35,25 +36,38 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
+    $leftItems = [
 //        ['label' => 'Home', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => '注册', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
+        $rightItems[] = ['label' => '注册', 'url' => ['/site/signup']];
+        $rightItems[] = ['label' => '登录', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        $rightItems[] = [
+            'label' => Yii::$app->user->identity->username,
+            'items' => [
+                ['label' => '我的主页', 'url' => ['/user/default/index']],
+                ['label' => '帐号设置', 'url' => ['/user/setting/index']],
+                ['label' => '退出', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']]
+            ],
+            'linkOptions'=>[
+                'class'=>'avatar',
+            ],
+        ];
     }
-    echo Nav::widget([
+    echo \common\components\rewrite\bootstrap\Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-left'],
+        'items' => $leftItems,
+        'activateParents' => true,
+//    'activateItems' => false,
+        'encodeLabels' => false,
+    ]);
+    echo \common\components\rewrite\bootstrap\Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
+        'items' => $rightItems,
+        'activateParents' => true,
+//    'activateItems' => false,
+        'encodeLabels' => false,
     ]);
     NavBar::end();
     ?>
@@ -61,6 +75,7 @@ AppAsset::register($this);
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'encodeLabels' => false,
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
@@ -69,7 +84,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?=Yii::$app->name ?> <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

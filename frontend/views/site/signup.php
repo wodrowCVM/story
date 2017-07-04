@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'repassword')->passwordInput() ?>
             <?= $form->field($model, 'code')->widget(\yii\captcha\Captcha::className()) ?>
             <div style="color:#999;margin:1em 0">
-                查看<?= Html::a('如何申请授权码', ['site/request-password-reset']) ?>.
+                查看<?= Html::a('如何申请授权码', ['help/how-to-get-auth-code']) ?>.
             </div>
             <div class="form-group">
                 <?= Html::submitButton('注册', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

@@ -46,6 +46,26 @@ return [
 //                '<controller:\w+>/<action:\w+>.html'=>'<controller>/<action>',
             ],
         ],
+        'as access' => [
+            'class' => \frontend\components\behaviors\Check::className(),
+            'except' => [
+                'site/*',
+                'help/*',
+                'gii/*',
+                'debug/*',
+            ],
+            'rules' => [
+                [
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+            ],
+        ],
+    ],
+    'modules' => [
+        'user' => [
+            'class' => 'frontend\modules\user\UserModule',
+        ],
     ],
     'params' => $params,
 ];
