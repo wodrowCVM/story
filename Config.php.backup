@@ -3,7 +3,8 @@
 class Config
 {
     public static $frontendUrl = "http://frontend.story.deepin.me.tt/";
+    public static $backendUrl = "http://backend.story.deepin.me.tt/";
     public static $storageUrl = "http://storage.story.deepin.me.tt/";
     public static $adminEmail = "1173957281@qq.com";
-    public static $adminQQ = "1173957281";s
+    public static $adminQQ = "1173957281";
 }
