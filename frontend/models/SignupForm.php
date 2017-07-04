@@ -88,14 +88,27 @@ class SignupForm extends Model
             ->setSubject("注册激活用户")
             ->send();
         if ($is_send){
-            if ($user->save()){
-                return $user;
-            }else{
-                \Yii::$app->session->setFlash('error', '用户注册失败。');
+            $trans = \Yii::$app->db->beginTransaction();
+            try{
+                if ($user->save()){
+                    $auth_code = UserAuthCode::findOne(['code'=>$this->authcode]);
+                    $auth_code->bind_user = $user->id;
+                    $auth_code->bind_at = NOW_TIME;
+                    $auth_code->updated_by = $user->id;
+                    if ($auth_code->save()){
+                        $trans->commit();
+                        return $user;
+                    }else{
+                        \Yii::$app->session->setFlash('error', '授权码绑定失败失败。');
+                    }
+                }else{
+                    \Yii::$app->session->setFlash('error', '用户注册失败。');
+                }
+            }catch (ErrorException $e){
+                $trans->rollBack();
             }
         }else{
             \Yii::$app->session->setFlash('error', '邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱。');
-//            throw new ErrorException("邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱", 1001);
         }
     }
 }

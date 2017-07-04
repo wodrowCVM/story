@@ -24,9 +24,7 @@ class User extends BaseUser
             [['mobile'], 'string', 'max' => 20],
             [['username'], 'unique'],
             [['email'], 'unique'],
-            [['password_reset_token'], 'unique'],
-            [['lock'], 'default', 'value' => '0'],
-            [['lock'], 'mootensai\components\OptimisticLockValidator']
+            [['password_reset_token'], 'unique']
         ]);
     }
 	

@@ -177,7 +177,8 @@ class SiteController extends Controller
     {
         $user = User::findOne(['username'=>$username]);
         if (!$user){
-            throw new ErrorException("没有找到用户", 1002);
+            Yii::$app->session->setFlash('error', "没有找到用户");
+            return $this->redirect(['signup']);
         }
         if ($user->status == $user::STATUS_ACTIVE){
             Yii::$app->session->setFlash('success', "已经激活的用户");

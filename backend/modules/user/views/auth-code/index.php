@@ -16,9 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('生成授权码', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <div class="search-form" style="display:none">
-        <?= $this->render('_search', ['model' => $searchModel]); ?>
-    </div>
     <?php
     $gridColumn = [
         ['class' => 'yii\grid\SerialColumn'],
