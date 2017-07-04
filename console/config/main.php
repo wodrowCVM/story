@@ -13,9 +13,8 @@ return [
     'controllerNamespace' => 'console\controllers',
     'controllerMap' => [
         'fixture' => [
-            'class' => 'yii\console\controllers\FixtureController',
-            'namespace' => 'common\fixtures',
-          ],
+            'class' => \yii\faker\FixtureController::className(),
+        ],
     ],
     'components' => [
         'log' => [

@@ -51,11 +51,12 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = User::findOne(['username'=>$this->username]);
-            if ($user->status == $user::STATUS_INACTIVE){
-                $this->addError($attribute, '没有激活，请先激活');
-            }
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, '账号或密码错误');
+            }else{
+                if ($user->status == $user::STATUS_INACTIVE){
+                    $this->addError($attribute, '没有激活，请先激活');
+                }
             }
         }
     }
