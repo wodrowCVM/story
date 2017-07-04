@@ -15,6 +15,40 @@ return [
         'admin' => [
             'class' => 'mdm\admin\Module',
             'layout' => 'left-menu',//yii2-admin的导航菜单
+            'controllerMap' => [
+                'assignment' => [
+                    'class' => 'mdm\admin\controllers\AssignmentController',
+                    'userClassName' => \common\models\User::className(),
+                    'idField' => 'user_id',
+                    'usernameField' => 'username',
+                    'extraColumns' => [
+                        'mobile',
+                        'email',
+                        [
+                            'label' => 'created_at',
+                            'format' => ['date', 'php:Y-m-d H:i:s'],
+                            'value' => function ($model) {
+                                return $model->created_at;
+                            }
+                        ],
+                        [
+                            'label' => 'updated_at',
+                            'format' => ['date', 'php:Y-m-d H:i:s'],
+                            'value' => function ($model) {
+                                return $model->created_at;
+                            }
+                        ],
+                    ],
+//                    'searchClass' => 'backend\models\UserSearch',
+                ],
+            ],
+            'mainLayout' => '@app/views/layouts/main.php',
+            'menus' => [
+                'assignment' => [
+                    'label' => '用户授权' // change label
+                ],
+                'user' => null, // disable menu
+            ],
         ]
     ],
     'components' => [
@@ -22,7 +56,8 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'class' => \common\components\rewrite\web\User::className(),
+            'identityClass' => \common\models\User::className(),
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
@@ -59,8 +94,8 @@ return [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/*',//允许访问的节点，可自行添加
-            'admin/*',//允许所有人访问admin节点及其子节点
-            'debug/*',
+//            'admin/*',//允许所有人访问admin节点及其子节点
+//            'debug/*',
             'gii/*',
         ]
     ],

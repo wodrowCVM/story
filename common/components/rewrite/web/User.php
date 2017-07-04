@@ -6,7 +6,7 @@
  * Time: 下午2:36
  */
 
-namespace common\components\rewrite;
+namespace common\components\rewrite\web;
 
 /**
  * Class User
