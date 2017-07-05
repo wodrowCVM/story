@@ -1,8 +1,12 @@
 <?php
-
-/* @var $this yii\web\View */
-
+/**
+ * @var \yii\web\View $this
+ */
 $this->title = '首页';
+$diskData = \common\components\tools\ServerInfo::getDiskData();
+$diskTotal = $diskData['iTotal'];
+$diskUseless = $diskData['iUsableness'];
+$diskUse = $diskTotal - $diskUseless;
 ?>
 <div class="site-index">
     <div class="body-content">
@@ -100,12 +104,38 @@ $this->title = '首页';
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Pie Chart Example
+                        空间使用状况
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="flot-chart">
-
+                            <?= \dosamigos\chartjs\ChartJs::widget([
+                                'type' => 'pie',
+                                'data' => [
+                                    'labels' => [
+                                        "已使用",
+                                        "未使用",
+                                    ],
+                                    'datasets' => [
+                                        [
+                                            'label' => '空间使用状况',
+                                            'data' => [
+                                                $diskUse,
+                                                $diskUseless,
+                                            ],
+                                            'backgroundColor' => [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                            ],
+                                            'borderColor' => [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                            ],
+                                            'borderWidth' => 1
+                                        ]
+                                    ]
+                                ]]);
+                            ?>
                         </div>
                     </div>
                     <!-- /.panel-body -->
@@ -115,13 +145,13 @@ $this->title = '首页';
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Pie Chart Example
+                        活跃度
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="flot-chart">
                             <?= \dosamigos\chartjs\ChartJs::widget([
-                                'type' => 'bar',
+                                'type' => 'line',
                                 'data' => [
                                     'labels' => ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
                                     'datasets' => [
