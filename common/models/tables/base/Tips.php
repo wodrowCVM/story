@@ -8,23 +8,20 @@ use yii\behaviors\BlameableBehavior;
 use mootensai\behaviors\UUIDBehavior;
 
 /**
- * This is the base model class for table "{{%user_auth_code}}".
+ * This is the base model class for table "{{%tips}}".
  *
  * @property integer $id
- * @property string $code
- * @property integer $bind_user
- * @property integer $bind_at
- * @property integer $created_by
- * @property integer $created_at
- * @property integer $updated_by
- * @property integer $updated_at
+ * @property string $msg
  * @property integer $status
+ * @property integer $created_at
+ * @property integer $created_by
+ * @property integer $updated_at
+ * @property integer $updated_by
  *
- * @property \common\models\tables\User $bindUser
  * @property \common\models\tables\User $createdBy
  * @property \common\models\tables\User $updatedBy
  */
-class UserAuthCode extends \yii\db\ActiveRecord
+class Tips extends \yii\db\ActiveRecord
 {
     use \mootensai\relation\RelationTrait;
 
@@ -34,9 +31,9 @@ class UserAuthCode extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'created_by', 'created_at', 'updated_by', 'updated_at'], 'required'],
-            [['bind_user', 'bind_at', 'created_by', 'created_at', 'updated_by', 'updated_at', 'status'], 'integer'],
-            [['code'], 'string', 'max' => 50]
+            [['msg', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['msg'], 'string', 'max' => 200]
         ];
     }
     
@@ -45,7 +42,7 @@ class UserAuthCode extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%user_auth_code}}';
+        return '{{%tips}}';
     }
 
     /**
@@ -55,21 +52,11 @@ class UserAuthCode extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'Code',
-            'bind_user' => 'Bind User',
-            'bind_at' => 'Bind At',
+            'msg' => 'Msg',
             'status' => 'Status',
         ];
     }
     
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBindUser()
-    {
-        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'bind_user']);
-    }
-        
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -96,12 +83,12 @@ class UserAuthCode extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
+                'updatedAtAttribute' => 'updated_by',
             ],
             'blameable' => [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => false,
+                'updatedByAttribute' => 'updated_by',
             ],
             'uuid' => [
                 'class' => UUIDBehavior::className(),
@@ -112,10 +99,10 @@ class UserAuthCode extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return \common\models\tables\activequerys\UserAuthCodeQuery the active query used by this AR class.
+     * @return \common\models\tables\activequerys\TipsQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\tables\activequerys\UserAuthCodeQuery(get_called_class());
+        return new \common\models\tables\activequerys\TipsQuery(get_called_class());
     }
 }

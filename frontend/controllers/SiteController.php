@@ -1,8 +1,11 @@
 <?php
 namespace frontend\controllers;
 
+use common\components\actions\TagSearch;
 use common\models\User;
+use common\models\UserSignin;
 use frontend\models\ActiveForEmailForm;
+use frontend\models\SigninForm;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\InvalidParamException;
@@ -66,6 +69,12 @@ class SiteController extends Controller
                 'maxLength' => 4,
                 'fontFile' => '@data/fonts/ztgjkt.ttf',
             ],
+            'ajax-tag-search' => [ // 标签搜索
+                'class' => TagSearch::className(),
+                'search_name' => Yii::$app->request->get('name'),
+                'limit' => Yii::$app->request->get('limit')?Yii::$app->request->get('limit'):10,
+                'id' => Yii::$app->request->get('id'),
+            ],
         ];
     }
 
@@ -76,7 +85,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $signinForm = new SigninForm();
+        if ($signinForm->load(Yii::$app->request->post())&&$signinForm->validate()){
+            $signinForm->signin();
+        }
+        return $this->render('index', [
+            'signinForm' => $signinForm,
+        ]);
     }
 
     /**

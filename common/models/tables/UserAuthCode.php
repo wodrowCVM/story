@@ -2,7 +2,6 @@
 
 namespace common\models\tables;
 
-use Yii;
 use \common\models\tables\base\UserAuthCode as BaseUserAuthCode;
 
 /**

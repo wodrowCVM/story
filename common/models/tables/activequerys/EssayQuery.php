@@ -1,13 +1,13 @@
 <?php
 
-namespace common\models\tables;
+namespace common\models\tables\activequerys;
 
 /**
- * This is the ActiveQuery class for [[User]].
+ * This is the ActiveQuery class for [[\common\models\tables\activequerys\Essay]].
  *
- * @see User
+ * @see \common\models\tables\activequerys\Essay
  */
-class UserQuery extends \yii\db\ActiveQuery
+class EssayQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -17,7 +17,7 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return User[]|array
+     * @return \common\models\tables\activequerys\Essay[]|array
      */
     public function all($db = null)
     {
@@ -26,7 +26,7 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return User|array|null
+     * @return \common\models\tables\activequerys\Essay|array|null
      */
     public function one($db = null)
     {

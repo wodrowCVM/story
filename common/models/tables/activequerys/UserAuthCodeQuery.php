@@ -1,11 +1,11 @@
 <?php
 
-namespace common\models\tables;
+namespace common\models\tables\activequerys;
 
 /**
- * This is the ActiveQuery class for [[UserAuthCode]].
+ * This is the ActiveQuery class for [[\common\models\tables\activequerys\UserAuthCode]].
  *
- * @see UserAuthCode
+ * @see \common\models\tables\activequerys\UserAuthCode
  */
 class UserAuthCodeQuery extends \yii\db\ActiveQuery
 {
@@ -17,7 +17,7 @@ class UserAuthCodeQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return UserAuthCode[]|array
+     * @return \common\models\tables\activequerys\UserAuthCode[]|array
      */
     public function all($db = null)
     {
@@ -26,7 +26,7 @@ class UserAuthCodeQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return UserAuthCode|array|null
+     * @return \common\models\tables\activequerys\UserAuthCode|array|null
      */
     public function one($db = null)
     {

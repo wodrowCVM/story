@@ -40,31 +40,37 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'suffix'=>'.html',
+            'suffix' => '.html',
             'rules' => [
 //                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 //                '<controller:\w+>/<action:\w+>.html'=>'<controller>/<action>',
-            ],
-        ],
-        'as access' => [
-            'class' => \frontend\components\behaviors\Check::className(),
-            'except' => [
-                'site/*',
-                'help/*',
-                'gii/*',
-                'debug/*',
-            ],
-            'rules' => [
-                [
-                    'allow' => true,
-                    'roles' => ['@'],
-                ],
             ],
         ],
     ],
     'modules' => [
         'user' => [
             'class' => 'frontend\modules\user\UserModule',
+        ],
+        'essay' => [ // 随笔
+            'class' => 'frontend\modules\essay\EssayModule',
+        ],
+        'novel' => [ // 小说
+            'class' => 'frontend\modules\novel\NovelModule',
+        ],
+    ],
+    'as access' => [
+        'class' => \frontend\components\behaviors\Check::className(),
+        'except' => [
+            'site/*',
+            'help/*',
+            'gii/*',
+            'debug/*',
+        ],
+        'rules' => [
+            [
+                'allow' => true,
+                'roles' => ['@'],
+            ],
         ],
     ],
     'params' => $params,

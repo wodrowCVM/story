@@ -11,6 +11,7 @@ class UserModule extends \yii\base\Module
      * @inheritdoc
      */
     public $controllerNamespace = 'frontend\modules\user\controllers';
+    public $layout= "@frontend/modules/user/views/layouts/user-center";
 
     /**
      * @inheritdoc
