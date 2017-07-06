@@ -19,7 +19,7 @@ use common\components\rewrite\mootensai\relation\RelationTrait;
  */
 class Essay extends \common\models\tables\Essay
 {
-    use RelationTrait;
+//    use RelationTrait;
 
     const TYPE_DEFAULT = 10;
     const STATUS_ACTIVE = 10;

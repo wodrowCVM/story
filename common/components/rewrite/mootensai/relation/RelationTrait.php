@@ -2,11 +2,13 @@
 
 namespace common\components\rewrite\mootensai\relation;
 
+use yii\base\ErrorException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
+use mootensai\relation\RelationTrait as X;
 
 trait RelationTrait
 {
@@ -101,7 +103,21 @@ trait RelationTrait
                                         if ($isManyMany) $notDeletedFK[$key] = $this->$value;
                                         elseif ($AQ->multiple) $notDeletedFK[$key] = "$key = '{$this->$value}'";
                                     }
-                                    $relSave = $relModel->save();
+                                    if ($relModel->isNewRecord) {
+                                        $x = $relModel::findOne($relModel->toArray());
+                                        if ($x) {
+                                            $y = $relModel::deleteAll($relModel->toArray());
+                                            if ($y) {
+                                                $relSave = $relModel->save();
+                                            } else {
+                                                $relSave = 0;
+                                            }
+                                        } else {
+                                            $relSave = $relModel->save();
+                                        }
+                                    } else {
+                                        $relSave = $relModel->save();
+                                    }
                                     if (!$relSave || !empty($relModel->errors)) {
                                         $relModelWords = Inflector::camel2words(StringHelper::basename($AQ->modelClass));
                                         $index++;
@@ -150,7 +166,6 @@ trait RelationTrait
                                     } else {
                                         $notDeletedFK = implode(' AND ', $notDeletedFK);
                                         $compiledNotDeletedPK = implode(',', $notDeletedPK);
-                                        //var_dump($compiledNotDeletedPK);exit;
                                         if (!empty($compiledNotDeletedPK)) {
                                             try {
                                                 $relModel->deleteAll($notDeletedFK . ' AND ' . $relPKAttr[0] . " NOT IN ($compiledNotDeletedPK)");
@@ -166,7 +181,18 @@ trait RelationTrait
                                 foreach ($link as $key => $value) {
                                     $records->$key = $this->$value;
                                 }
-                                $relSave = $records->save();
+                                $x = $records::findOne($records->toArray());
+                                if ($x) {
+                                    $y = $records::deleteAll($records->toArray());
+                                    if ($y) {
+                                        $relSave = $records->save();
+                                    } else {
+                                        $relSave = 0;
+                                    }
+                                } else {
+                                    $relSave = $records->save();
+                                }
+//                                $relSave = $records->save();
                                 if (!$relSave || !empty($records->errors)) {
                                     $recordsWords = Inflector::camel2words(StringHelper::basename($AQ->modelClass));
                                     foreach ($records->errors as $validation) {
@@ -235,6 +261,49 @@ trait RelationTrait
             $trans->rollBack();
             $this->isNewRecord = $isNewRecord;
             throw $exc;
+        }
+    }
+
+    public function saveAllBak($skippedRelations = [])
+    {
+        var_dump(self::className());
+        foreach ($this->relatedRecords as $k => $v) {
+            $AQ = $this->getRelation($k);
+            $link = $AQ->link;
+            var_dump($link);
+            foreach ($v as $k1 => $v1) {
+                var_dump($v1->tag_id);
+                var_dump($v1::className());
+            }
+        }
+        exit;
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            if ($this->save()) {
+                foreach ($this->relatedRecords as $name => $records) {
+                    if (in_array($name, $skippedRelations))
+                        continue;
+                    if (!empty($records)) {
+                        foreach ($records as $index => $relModel) {
+                            if ($relModel->isNewRecord) {
+                                $x = $relModel::findOne($relModel->toArray());
+                                if ($x) {
+                                    $relSave = $relModel::deleteAll($relModel->toArray()) && $relModel->save();
+                                } else {
+                                    $relSave = $relModel->save();
+                                }
+                            } else {
+                                $relSave = $relModel->save();
+                            }
+                        }
+                    }
+                }
+            }
+            $trans->commit();
+            return true;
+        } catch (ErrorException $e) {
+            $trans->rollBack();
+            return false;
         }
     }
 
