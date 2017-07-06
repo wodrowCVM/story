@@ -11,6 +11,6 @@ namespace common\models\interfaces;
 
 interface Item
 {
-    public static function getListUrl();
-    public function getUrl();
+//    public static function getListUrl();
+//    public function getUrl();
 }

@@ -13,9 +13,15 @@ use mootensai\behaviors\UUIDBehavior;
  * @property integer $id
  * @property integer $essay_id
  * @property integer $tag_id
+ * @property integer $created_at
+ * @property integer $created_by
+ * @property integer $updated_at
+ * @property integer $updated_by
  *
+ * @property \common\models\tables\User $createdBy
  * @property \common\models\tables\Essay $essay
  * @property \common\models\tables\Tag $tag
+ * @property \common\models\tables\User $updatedBy
  */
 class BindEssayTag extends \yii\db\ActiveRecord
 {
@@ -27,8 +33,8 @@ class BindEssayTag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['essay_id', 'tag_id'], 'required'],
-            [['essay_id', 'tag_id'], 'integer'],
+            [['essay_id', 'tag_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
+            [['essay_id', 'tag_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['essay_id', 'tag_id'], 'unique', 'targetAttribute' => ['essay_id', 'tag_id'], 'message' => 'The combination of Essay ID and Tag ID has already been taken.']
         ];
     }
@@ -47,12 +53,20 @@ class BindEssayTag extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'essay_id' => 'Essay ID',
-            'tag_id' => 'Tag ID',
+            'id' => Yii::t('app', 'ID'),
+            'essay_id' => Yii::t('app', 'Essay ID'),
+            'tag_id' => Yii::t('app', 'Tag ID'),
         ];
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'created_by']);
+    }
+        
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -67,6 +81,14 @@ class BindEssayTag extends \yii\db\ActiveRecord
     public function getTag()
     {
         return $this->hasOne(\common\models\tables\Tag::className(), ['id' => 'tag_id']);
+    }
+        
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'updated_by']);
     }
     
 /**

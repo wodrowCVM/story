@@ -27,7 +27,9 @@
         "kartik-v/yii2-detail-view": "^1.7",
         "kartik-v/yii2-icons": "@dev",
         "2amigos/yii2-chartjs-widget": "^2.0",
-        "kartik-v/yii2-widget-sidenav": "^1.0"
+        "kartik-v/yii2-widget-sidenav": "^1.0",
+        "yiidoc/yii2-redactor": "^2.0",
+        "kartik-v/yii2-datecontrol": "^1.9"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

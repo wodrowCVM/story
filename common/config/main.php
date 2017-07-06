@@ -30,6 +30,16 @@ return [
         'treemanager' =>  [
             'class' => '\kartik\tree\Module',
             // see settings on http://demos.krajee.com/tree-manager#module
-        ]
+        ],
+        'dynagrid'=>[
+            'class'=>\kartik\dynagrid\Module::className(),
+            // other settings (refer documentation)
+        ],
+        'redactor' => [
+            'class' => \yii\redactor\RedactorModule::className(),
+            'uploadDir' => '@storage/web/images/redactor',
+            'uploadUrl' => '@storageUrl/images/redactor',
+            'imageAllowExtensions'=>['jpg','png','gif']
+        ],
     ],
 ];

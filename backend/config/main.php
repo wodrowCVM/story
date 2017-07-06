@@ -53,6 +53,9 @@ return [
         'user' => [
             'class' => 'backend\modules\user\UserModule',
         ],
+        'tag' => [ // 标签管理
+            'class' => 'backend\modules\tag\TagModule',
+        ],
     ],
     'components' => [
         'request' => [

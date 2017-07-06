@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </a>
                     </div>
                     <!-- /.list-group -->
-                    <?=\yii\helpers\Html::a('我要写随笔', ['/user/essay/'], ['class'=>"btn btn-primary btn-block"]) ?>
+                    <?=\yii\helpers\Html::a('我要写随笔', ['/user/essay/create'], ['class'=>"btn btn-primary btn-block"]) ?>
                 </div>
                 <!-- /.panel-body -->
             </div>
