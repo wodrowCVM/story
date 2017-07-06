@@ -9,6 +9,8 @@
 namespace common\models;
 
 
+use common\components\rewrite\mootensai\relation\RelationTrait;
+
 /**
  * Class Essay
  * @package common\models
@@ -17,6 +19,8 @@ namespace common\models;
  */
 class Essay extends \common\models\tables\Essay
 {
+    use RelationTrait;
+
     const TYPE_DEFAULT = 10;
     const STATUS_ACTIVE = 10;
     const STATUS_DELETED = 0;
@@ -58,6 +62,6 @@ class Essay extends \common\models\tables\Essay
      */
     public function getBindEssayTags()
     {
-        return $this->hasMany(\common\models\tables\BindEssayTag::className(), ['essay_id' => 'id']);
+        return $this->hasMany(\common\models\BindEssayTag::className(), ['essay_id' => 'id']);
     }
 }

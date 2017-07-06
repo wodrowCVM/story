@@ -25,7 +25,8 @@ class BindEssayTag extends \common\models\tables\BindEssayTag
         return [
             [['essay_id'], 'required'],
             [['essay_id', 'tag_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['essay_id', 'tag_id'], 'unique', 'targetAttribute' => ['essay_id', 'tag_id'], 'message' => 'The combination of Essay ID and Tag ID has already been taken.']
+            [['essay_id', 'tag_id'], 'unique', 'targetAttribute' => ['essay_id', 'tag_id'], 'message' => 'The combination of Essay ID and Tag ID has already been taken.'],
+            ['select2_tag_id_show', 'safe']
         ];
     }
 }

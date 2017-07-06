@@ -34,7 +34,7 @@ class TagSearch extends Action
             $data = $command->queryAll();
             $x = $out['results'];
             foreach ($data as $k => $v){
-                $x[$k]['id'] = $v['text'];
+                $x[$k]['id'] = $v['id'];
                 $x[$k]['text'] = $v['text'];
             }
             $x = array_values($x);
