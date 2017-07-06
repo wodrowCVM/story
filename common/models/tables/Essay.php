@@ -18,7 +18,7 @@ class Essay extends BaseEssay
 	    [
             [['title', 'content', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
             [['content'], 'string'],
-            [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'need_money', 'need_integral', 'need_xp'], 'integer'],
             [['title'], 'string', 'max' => 50],
             [['desc'], 'string', 'max' => 255]
         ]);

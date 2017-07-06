@@ -51,7 +51,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                             </div>
                         </div>
                     </div>
-                    <a href="#">
+                    <a href="<?=\yii\helpers\Url::toRoute(['/essay']) ?>">
                         <div class="panel-footer">
                             <span class="pull-left">查看</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -206,7 +206,8 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                                         <?= \kartik\icons\Icon::show('magic') ?>小贴士
                                     </div>
                                     <div class="panel-body">
-                                        <p style="text-indent: 2em;"><?=$tips->msg ?></p>
+                                        <p style="text-indent: 2em;height: 6em;"><?=$tips->msg ?></p>
+                                        <span class="pull-right"><small>--<code><?=Yii::$app->user->identity->username ?></code></small></span>
                                     </div>
                                     <div class="panel-footer">
                                         <small><?=\yii\helpers\Html::a('刷新', ['/site/index']) ?>页面随机获取小提示</small>
@@ -225,7 +226,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                                             <?= \yii\helpers\Html::submitButton("签到", ['class' => "btn btn-primary btn-block"]) ?>
                                             <?php \yii\widgets\ActiveForm::end(); ?>
                                         <?php else: ?>
-                                            <p style="text-indent: 2em;"><?=$signinForm->todaySignin->message ?></p>
+                                            <p style="text-indent: 2em;height: 6em;"><?=$signinForm->todaySignin->message ?></p>
                                             <span class="pull-right"><small>你已经连续签到了<code><?=$signinForm->todaySignin->c_days ?></code>天</small></span>
                                         <?php endif; ?>
                                     </div>
@@ -265,6 +266,23 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <?= \kartik\icons\Icon::show('tag') ?>热门标签
+                        <span class="pull-right">
+                            <small><?= \yii\helpers\Html::a('更多 ' . \kartik\icons\Icon::show('arrow-circle-right'), ['/tag']) ?></small>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae
+                            ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                    </div>
+                    <div class="panel-footer">
+                        Panel Footer
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <?= \kartik\icons\Icon::show('tag') ?>常见问题
                         <span class="pull-right">
                             <small><?= \yii\helpers\Html::a('更多 ' . \kartik\icons\Icon::show('arrow-circle-right'), ['/tag']) ?></small>
                         </span>

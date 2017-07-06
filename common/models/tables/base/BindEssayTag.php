@@ -8,21 +8,16 @@ use yii\behaviors\BlameableBehavior;
 use mootensai\behaviors\UUIDBehavior;
 
 /**
- * This is the base model class for table "{{%tag}}".
+ * This is the base model class for table "{{%bind_essay_tag}}".
  *
  * @property integer $id
- * @property string $name
- * @property string $desc
- * @property integer $type
- * @property integer $status
- * @property integer $created_at
- * @property integer $created_by
- * @property integer $updated_at
- * @property integer $updated_by
+ * @property integer $essay_id
+ * @property integer $tag_id
  *
- * @property \common\models\tables\BindEssayTag[] $bindEssayTags
+ * @property \common\models\tables\Essay $essay
+ * @property \common\models\tables\Tag $tag
  */
-class Tag extends \yii\db\ActiveRecord
+class BindEssayTag extends \yii\db\ActiveRecord
 {
     use \mootensai\relation\RelationTrait;
 
@@ -32,10 +27,9 @@ class Tag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
-            [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name'], 'string', 'max' => 50],
-            [['desc'], 'string', 'max' => 255]
+            [['essay_id', 'tag_id'], 'required'],
+            [['essay_id', 'tag_id'], 'integer'],
+            [['essay_id', 'tag_id'], 'unique', 'targetAttribute' => ['essay_id', 'tag_id'], 'message' => 'The combination of Essay ID and Tag ID has already been taken.']
         ];
     }
     
@@ -44,7 +38,7 @@ class Tag extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%tag}}';
+        return '{{%bind_essay_tag}}';
     }
 
     /**
@@ -54,19 +48,25 @@ class Tag extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'desc' => 'Desc',
-            'type' => 'Type',
-            'status' => 'Status',
+            'essay_id' => 'Essay ID',
+            'tag_id' => 'Tag ID',
         ];
     }
     
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBindEssayTags()
+    public function getEssay()
     {
-        return $this->hasMany(\common\models\tables\BindEssayTag::className(), ['tag_id' => 'id']);
+        return $this->hasOne(\common\models\tables\Essay::className(), ['id' => 'essay_id']);
+    }
+        
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTag()
+    {
+        return $this->hasOne(\common\models\tables\Tag::className(), ['id' => 'tag_id']);
     }
     
 /**
@@ -95,10 +95,10 @@ class Tag extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return \common\models\tables\activequerys\TagQuery the active query used by this AR class.
+     * @return \common\models\tables\activequerys\BindEssayTagQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\tables\activequerys\TagQuery(get_called_class());
+        return new \common\models\tables\activequerys\BindEssayTagQuery(get_called_class());
     }
 }

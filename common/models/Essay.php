@@ -9,6 +9,7 @@
 namespace common\models;
 
 
+
 class Essay extends \common\models\tables\Essay
 {
 

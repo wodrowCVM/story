@@ -20,6 +20,11 @@ use mootensai\behaviors\UUIDBehavior;
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
+ * @property integer $need_money
+ * @property integer $need_integral
+ * @property integer $need_xp
+ *
+ * @property \common\models\tables\BindEssayTag[] $bindEssayTags
  */
 class Essay extends \yii\db\ActiveRecord
 {
@@ -33,7 +38,7 @@ class Essay extends \yii\db\ActiveRecord
         return [
             [['title', 'content', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
             [['content'], 'string'],
-            [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'need_money', 'need_integral', 'need_xp'], 'integer'],
             [['title'], 'string', 'max' => 50],
             [['desc'], 'string', 'max' => 255]
         ];
@@ -59,9 +64,20 @@ class Essay extends \yii\db\ActiveRecord
             'content' => 'Content',
             'type' => 'Type',
             'status' => 'Status',
+            'need_money' => 'Need Money',
+            'need_integral' => 'Need Integral',
+            'need_xp' => 'Need Xp',
         ];
     }
-
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBindEssayTags()
+    {
+        return $this->hasMany(\common\models\tables\BindEssayTag::className(), ['essay_id' => 'id']);
+    }
+    
 /**
      * @inheritdoc
      * @return array mixed
