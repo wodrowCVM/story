@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wodrow
- * Date: 17-7-6
- * Time: 下午1:12
- */
-
 namespace common\models;
+
+use common\components\tools\Tools;
+use yii\base\ErrorException;
 
 /**
  * Class BindEssayTag
@@ -68,5 +64,22 @@ class BindEssayTag extends \common\models\tables\BindEssayTag
     public function getUpdatedBy()
     {
         return $this->hasOne(\common\models\User::className(), ['id' => 'updated_by']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert){
+            if (is_numeric($this->tag_id)){}else{
+                $tag = new Tag();
+                $tag->name = $this->tag_id;
+                if ($tag->save()){
+                    $this->tag_id = $tag->id;
+                }else{
+                    throw new ErrorException(var_export($tag->getErrors(), true), 1212);
+                }
+            }
+        }
+        parent::beforeSave($insert);
+        return parent::beforeSave($insert);
     }
 }

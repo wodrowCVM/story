@@ -19,7 +19,8 @@ class Tag extends BaseTag
             [['name', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
             [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 50],
-            [['desc'], 'string', 'max' => 255]
+            [['desc'], 'string', 'max' => 255],
+            [['name'], 'unique']
         ]);
     }
 	

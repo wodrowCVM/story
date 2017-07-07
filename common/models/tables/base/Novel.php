@@ -7,23 +7,20 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 
 /**
- * This is the base model class for table "{{%tag}}".
+ * This is the base model class for table "{{%novel}}".
  *
  * @property integer $id
- * @property string $name
+ * @property string $title
  * @property string $desc
+ * @property string $content
  * @property integer $type
  * @property integer $status
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
- *
- * @property \common\models\tables\BindEssayTag[] $bindEssayTags
- * @property \common\models\tables\User $createdBy
- * @property \common\models\tables\User $updatedBy
  */
-class Tag extends \yii\db\ActiveRecord
+class Novel extends \yii\db\ActiveRecord
 {
     use \mootensai\relation\RelationTrait;
 
@@ -33,11 +30,11 @@ class Tag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
+            [['title', 'desc', 'content', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
+            [['content'], 'string'],
             [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name'], 'string', 'max' => 50],
-            [['desc'], 'string', 'max' => 255],
-            [['name'], 'unique']
+            [['title'], 'string', 'max' => 50],
+            [['desc'], 'string', 'max' => 200]
         ];
     }
     
@@ -46,7 +43,7 @@ class Tag extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%tag}}';
+        return '{{%novel}}';
     }
 
     /**
@@ -56,37 +53,14 @@ class Tag extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
+            'title' => Yii::t('app', 'Title'),
             'desc' => Yii::t('app', 'Desc'),
+            'content' => Yii::t('app', 'Content'),
             'type' => Yii::t('app', 'Type'),
             'status' => Yii::t('app', 'Status'),
         ];
     }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBindEssayTags()
-    {
-        return $this->hasMany(\common\models\tables\BindEssayTag::className(), ['tag_id' => 'id']);
-    }
-        
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCreatedBy()
-    {
-        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'created_by']);
-    }
-        
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'updated_by']);
-    }
-    
+
 /**
      * @inheritdoc
      * @return array mixed
@@ -109,10 +83,10 @@ class Tag extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return \common\models\tables\activequerys\TagQuery the active query used by this AR class.
+     * @return \common\models\tables\activequerys\NovelQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\tables\activequerys\TagQuery(get_called_class());
+        return new \common\models\tables\activequerys\NovelQuery(get_called_class());
     }
 }

@@ -56,10 +56,20 @@ class Tag extends \common\models\tables\Tag
     {
         return [
             [['name'], 'required'],
+            ['name', 'isNotNumeric'],
             [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 50],
-            [['desc'], 'string', 'max' => 255]
+            [['desc'], 'string', 'max' => 255],
         ];
+    }
+
+    public function isNotNumeric($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            if (is_numeric($this->name)){
+                $this->addError($attribute, '标签名不能为纯数字');
+            }
+        }
     }
 
     /**
