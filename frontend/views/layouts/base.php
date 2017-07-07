@@ -28,6 +28,10 @@ AppAsset::register($this);
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
+//            'class' => 'navbar-fixed-top',
+            'style' => [
+                'box-shadow' => "0 1px 1px rgba(0,0,0,0.11)",
+            ],
         ],
     ]);
     $leftItems = [

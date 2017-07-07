@@ -120,6 +120,13 @@ a.desc:after {
 }
 
 /*custom start*/
+/*.navbar-fixed-top .active{background: #337ab7;}
+.navbar-fixed-top .active:hover{background: #337ab7;}
+.navbar-fixed-top .active a{color: #fff;}
+.navbar-fixed-top .active a:active{background: #337ab7;color: #fff;}
+.navbar-fixed-top .active a:visited{color: #337ab7;}
+.navbar-fixed-top .active a:hover{background: #337ab7;color: #fff;}*/
+
 .item-list{}
 .item-list>.panel>.panel-body:hover{background: #f5f5f5;}
 .item-list>.panel>.panel-body>.item-head>h3{margin-top: 0;}
