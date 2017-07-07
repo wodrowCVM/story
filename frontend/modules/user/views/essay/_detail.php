@@ -9,30 +9,23 @@ use kartik\grid\GridView;
 
 ?>
 <div class="essay-view">
-
     <div class="row">
-        <div class="col-sm-9">
-            <h2><?= Html::encode($model->id) ?></h2>
-        </div>
+            <?=$model->content ?>
     </div>
-
     <div class="row">
-<?php 
-    $gridColumn = [
-        'id',
-        'title',
-        'desc',
-        'content:ntext',
-        'type',
-        'status',
-        'need_money',
-        'need_integral',
-        'need_xp',
-    ];
-    echo DetailView::widget([
-        'model' => $model,
-        'attributes' => $gridColumn
-    ]); 
-?>
+        <?php
+        $gridColumn = [
+            'created_at:datetime',
+            'updated_at:datetime',
+            [
+                'attribute' => 'updated_by',
+                'value' => $model->updatedBy->username,
+            ],
+        ];
+        echo DetailView::widget([
+            'model' => $model,
+            'attributes' => $gridColumn
+        ]);
+        ?>
     </div>
 </div>

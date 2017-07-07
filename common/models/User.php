@@ -5,6 +5,8 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\IdentityInterface;
 
 /**
@@ -22,6 +24,7 @@ use yii\web\IdentityInterface;
  * @property string $password write-only password
  *
  * @property UserAuthCode[] $userAuthCodes
+ * @property array $urls
  */
 class User extends \common\models\tables\User implements IdentityInterface
 {
@@ -241,5 +244,14 @@ class User extends \common\models\tables\User implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function getUrls()
+    {
+        $arr = [];
+        $arr['info_arr'] = ['/site/user-home', 'id'=>$this->id];
+        $arr['info'] = Url::to($arr['info_arr']);
+        $arr['info_show_username'] = Html::a($this->username, $arr['info_arr']);
+        return $arr;
     }
 }

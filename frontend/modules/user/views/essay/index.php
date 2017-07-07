@@ -35,13 +35,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'id',
         'title',
         'desc',
-        'type',
-        'status',
+        [
+            'class' => \common\components\grid\KEnumColumn::className(),
+            'attribute' => 'type',
+            'enum' => $searchModel::getType(),
+        ],
+        [
+            'class' => \common\components\grid\KEnumColumn::className(),
+            'attribute' => 'status',
+            'enum' => $searchModel::getStatus(),
+        ],
         'need_money',
         'need_integral',
         'need_xp',
         [
             'class' => 'yii\grid\ActionColumn',
+            'template' => '{view} {update} {delete} {link}',
+            'buttons' => [
+                'link' => function($url, $model, $key){
+                    return \yii\helpers\Html::a(\kartik\icons\Icon::show('link'), ['/user', 'id'=>$key], [
+                        'class' => 'data-view',
+                        'data-id' => $key,
+                        'title' => '在前台查看',
+                    ]);
+                },
+            ],
         ],
     ]; 
     ?>
@@ -64,10 +82,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'target' => ExportMenu::TARGET_BLANK,
                 'fontAwesome' => true,
                 'dropdownOptions' => [
-                    'label' => 'Full',
+                    'label' => '全部',
                     'class' => 'btn btn-default',
                     'itemsBefore' => [
-                        '<li class="dropdown-header">Export All Data</li>',
+                        '<li class="dropdown-header">导出所有内容</li>',
                     ],
                 ],
             ]) ,

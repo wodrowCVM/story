@@ -257,4 +257,14 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    /**
+     * 个人主页
+     * @param $id
+     * @return string
+     */
+    public function actionUserHome($id)
+    {
+        return $this->render('user-home');
+    }
 }

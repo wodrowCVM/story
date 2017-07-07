@@ -118,3 +118,12 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/*custom start*/
+.item-list{}
+.item-list>.panel>.panel-body>.item-head>h3{margin-top: 0;}
+.item-list>.panel>.panel-body>.item-head a{text-decoration: none;}
+.item-list>.panel>.panel-body>.item-head a:hover{text-shadow: 0 0 2px;}
+.item-list>.panel>.panel-body>.item-body>p{
+    text-indent: 2em;
+}

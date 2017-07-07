@@ -1,72 +1,58 @@
 <?php
 /**
  * @var \yii\web\View $this
+ * @var \common\models\Essay[] $essays
+ * @var \yii\data\Pagination $pages
  */
 $this->title = "随笔列表";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="essay-default-index">
     <div class="row">
-        <div class="col-lg-9 col-md-8 col-sm-7"></div>
-        <div class="col-lg-3 col-md-4 col-sm-5">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> 收藏
+        <div class="col-lg-9 col-md-8 col-sm-7">
+            <div class="row">
+                <div class="items">
+                    <?php foreach($essays as $k => $v): ?>
+                        <div class="col-sm-12 item-list">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="item-head">
+                                        <h3><?=\yii\helpers\Html::a($v->title, $v->urls['view_arr'], []) ?></h3>
+                                    </div>
+                                    <div class="item-body">
+                                        <p><?=$v->desc ?></p>
+                                    </div>
+                                    <div class="item-foot">
+                                        <small>
+                                            <?=\kartik\icons\Icon::show('user') ?> 发布者: <?=$v->createdBy->urls['info_show_username'] ?>
+                                            <span style="margin-left: 2em;"></span>
+                                            <?=\kartik\icons\Icon::show('calendar') ?> 发布日期: <?=date("Y-m-d", $v->created_at) ?>
+                                            <span style="margin-left: 2em;"></span>
+                                            <?=\kartik\icons\Icon::show('comment') ?> 评论: <code>1</code>条
+                                        </small>
+                                        <small class="pull-right">
+                                            <?=\yii\bootstrap\Html::a('阅读全文', $v->urls['view_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-comment fa-fw"></i> New Comment
-                            <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                            <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-envelope fa-fw"></i> Message Sent
-                            <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-tasks fa-fw"></i> New Task
-                            <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                            <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                            <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                            <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                            <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-money fa-fw"></i> Payment Received
-                            <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                        </a>
-                    </div>
-                    <!-- /.list-group -->
-                    <?=\yii\helpers\Html::a('我要写随笔', ['/user/essay/create'], ['class'=>"btn btn-primary btn-block"]) ?>
+                <div class="pages">
+                    <?=\yii\widgets\LinkPager::widget([
+                        'pagination' => $pages,
+                        'firstPageLabel' => '首页',
+                        'lastPageLabel' => '尾页',
+                        'prevPageLabel' => '上一页',
+                        'nextPageLabel' => '下一页',
+                        'maxButtonCount' => 10, //控制每页显示的页数
+                    ]) ?>
                 </div>
-                <!-- /.panel-body -->
             </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-5">
+            <?=$this->render('_state') ?>
         </div>
     </div>
 </div>

@@ -2,6 +2,8 @@
 
 namespace frontend\modules\essay\controllers;
 
+use common\models\Essay;
+use yii\data\Pagination;
 use yii\web\Controller;
 
 /**
@@ -15,6 +17,33 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $query = Essay::find()->orderBy(['created_at'=>SORT_DESC]);
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => 10,
+        ]);
+        $essays = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('index', [
+            'essays' => $essays,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionView($id)
+    {
+        $essay = $this->findEssay($id);
+        return $this->render('view', [
+            'essay' => $essay,
+        ]);
+    }
+
+    public function findEssay($id)
+    {
+        $essay = Essay::findOne(['id'=>$id, 'status'=>Essay::STATUS_ACTIVE]);
+        return $essay;
     }
 }

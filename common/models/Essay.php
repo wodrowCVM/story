@@ -16,6 +16,9 @@ use common\components\rewrite\mootensai\relation\RelationTrait;
  * @package common\models
  *
  * @property \common\models\BindEssayTag[] $bindEssayTags
+ * @property array $urls
+ * @property \common\models\User $createdBy
+ * @property \common\models\User $updatedBy
  */
 class Essay extends \common\models\tables\Essay
 {
@@ -54,6 +57,10 @@ class Essay extends \common\models\tables\Essay
             'need_money' => '所需金币',
             'need_integral' => '所需积分',
             'need_xp' => '所需经验',
+            'created_at' => \Yii::t('app', 'Created At'),
+            'created_by' => \Yii::t('app', 'Created By'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'updated_by' => \Yii::t('app', 'Updated By'),
         ];
     }
 
@@ -63,5 +70,29 @@ class Essay extends \common\models\tables\Essay
     public function getBindEssayTags()
     {
         return $this->hasMany(\common\models\BindEssayTag::className(), ['essay_id' => 'id']);
+    }
+
+    public function getUrls()
+    {
+        $arr = [];
+        $arr['view_arr'] = ['/essay/default/view', 'id'=>$this->id];
+        $arr['list_arr'] = ['/essay/default/index'];
+        return $arr;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(\common\models\User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(\common\models\User::className(), ['id' => 'updated_by']);
     }
 }
