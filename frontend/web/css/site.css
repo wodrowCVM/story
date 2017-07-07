@@ -121,6 +121,7 @@ a.desc:after {
 
 /*custom start*/
 .item-list{}
+.item-list>.panel>.panel-body:hover{background: #f5f5f5;}
 .item-list>.panel>.panel-body>.item-head>h3{margin-top: 0;}
 .item-list>.panel>.panel-body>.item-head a{text-decoration: none;}
 .item-list>.panel>.panel-body>.item-head a:hover{text-shadow: 0 0 2px;}
