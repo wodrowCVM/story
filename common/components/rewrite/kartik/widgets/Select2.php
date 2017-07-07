@@ -42,10 +42,11 @@ class Select2 extends \kartik\select2\Select2
                 $val = isset($this->initValueText) ? $this->initValueText : $key;
                 if (isset($this->value)&&isset($this->initValueText)&&is_array($this->initValueText)){
                     $x = $this->initValueText;
-                    $class = "\\".$x['class'];
-                    $m = new $class;
+                    $c = "\\".$x['c'];
+                    $m = new $c;
                     $_data = $m::findOne($key);
-                    $val = $_data->name;
+                    $k = $x['k'];
+                    $val = $_data->$k;
                 }
                 $this->data = $multiple ? array_combine($key, $val) : [$key => $val];
             }

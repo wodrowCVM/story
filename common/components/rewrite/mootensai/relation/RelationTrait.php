@@ -116,7 +116,17 @@ trait RelationTrait
                                             $relSave = $relModel->save();
                                         }
                                     } else {
-                                        $relSave = $relModel->save();
+                                        $x = $relModel::findOne($relModel->toArray());
+                                        if ($x) {
+                                            $y = $relModel::deleteAll($relModel->toArray());
+                                            if ($y) {
+                                                $relSave = $relModel->save();
+                                            } else {
+                                                $relSave = 0;
+                                            }
+                                        } else {
+                                            $relSave = $relModel->save();
+                                        }
                                     }
                                     if (!$relSave || !empty($relModel->errors)) {
                                         $relModelWords = Inflector::camel2words(StringHelper::basename($AQ->modelClass));

@@ -28,7 +28,8 @@
                     'language' => Yii::$app->language,
                     'options' => ['placeholder' => '请选择或输入'],
                     'initValueText' => [
-                        'class' => \common\models\Tag::className(),
+                        'c' => \common\models\Tag::className(),
+                        'k' => 'name',
                     ],
                     'pluginOptions' => [
                         'tags' => true,
