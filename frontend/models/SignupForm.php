@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\models;
 
 use common\models\UserAuthCode;
@@ -36,6 +37,7 @@ class SignupForm extends Model
     public function rules()
     {
         return [
+            ['authcode', 'trim'],
             ['authcode', 'required'],
             ['authcode', 'exist',
                 'targetAttribute' => 'code',
@@ -80,35 +82,35 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        \Yii::$app->cache->set($user->username."_signup_active_key", \Yii::$app->security->generateRandomString(), 3600);
-        $is_send = \Yii::$app->mailer
-            ->compose(['html'=>'signup'], ['url'=>\yii\helpers\Url::toRoute(['site/set-active', 'username'=>$user->username, 'code'=>\Yii::$app->cache->get($user->username."_signup_active_key")], true)])
-            ->setFrom(\Config::$adminEmail)
-            ->setTo($user->email)
-            ->setSubject("注册激活用户")
-            ->send();
-        if ($is_send){
-            $trans = \Yii::$app->db->beginTransaction();
-            try{
-                if ($user->save()){
-                    $auth_code = UserAuthCode::findOne(['code'=>$this->authcode]);
-                    $auth_code->bind_user = $user->id;
-                    $auth_code->bind_at = NOW_TIME;
-                    $auth_code->updated_by = $user->id;
-                    if ($auth_code->save()){
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            if ($user->save()) {
+                $auth_code = UserAuthCode::findOne(['code' => $this->authcode]);
+                $auth_code->bind_user = $user->id;
+                $auth_code->bind_at = NOW_TIME;
+                $auth_code->updated_by = $user->id;
+                if ($auth_code->save()) {
+                    \Yii::$app->cache->set($user->username . "_signup_active_key", \Yii::$app->security->generateRandomString(), 3600);
+                    $is_send = \Yii::$app->mailer
+                        ->compose(['html' => 'signup'], ['url' => \yii\helpers\Url::toRoute(['site/set-active', 'username' => $user->username, 'code' => \Yii::$app->cache->get($user->username . "_signup_active_key")], true)])
+                        ->setFrom(\Config::$adminEmail)
+                        ->setTo($user->email)
+                        ->setSubject("注册激活用户")
+                        ->send();
+                    if ($is_send) {
                         $trans->commit();
                         return $user;
-                    }else{
-                        \Yii::$app->session->setFlash('error', '授权码绑定失败失败。');
+                    } else {
+                        \Yii::$app->session->setFlash('error', '邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱。');
                     }
-                }else{
-                    \Yii::$app->session->setFlash('error', '用户注册失败。');
+                } else {
+                    \Yii::$app->session->setFlash('error', '授权码绑定失败失败。');
                 }
-            }catch (ErrorException $e){
-                $trans->rollBack();
+            } else {
+                \Yii::$app->session->setFlash('error', '用户注册失败。');
             }
-        }else{
-            \Yii::$app->session->setFlash('error', '邮箱发送邮件失败，请检查邮箱是否有效或更换邮箱。');
+        } catch (ErrorException $e) {
+            $trans->rollBack();
         }
     }
 }

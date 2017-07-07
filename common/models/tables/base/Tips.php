@@ -5,7 +5,6 @@ namespace common\models\tables\base;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use mootensai\behaviors\UUIDBehavior;
 
 /**
  * This is the base model class for table "{{%tips}}".
@@ -51,9 +50,9 @@ class Tips extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'msg' => 'Msg',
-            'status' => 'Status',
+            'id' => Yii::t('app', 'ID'),
+            'msg' => Yii::t('app', 'Msg'),
+            'status' => Yii::t('app', 'Status'),
         ];
     }
     
@@ -83,16 +82,12 @@ class Tips extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_by',
+                'updatedAtAttribute' => 'updated_at',
             ],
             'blameable' => [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
-            ],
-            'uuid' => [
-                'class' => UUIDBehavior::className(),
-                'column' => 'id',
             ],
         ];
     }

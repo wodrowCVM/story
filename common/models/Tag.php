@@ -8,6 +8,8 @@
 
 namespace common\models;
 
+use common\components\rewrite\mootensai\relation\RelationTrait;
+
 /**
  * Class Tag
  * @package common\models
@@ -16,6 +18,8 @@ namespace common\models;
  */
 class Tag extends \common\models\tables\Tag
 {
+    use RelationTrait;
+
     const TYPE_DEFAULT = 10;
     const STATUS_ACTIVE = 10;
     const STATUS_DELETED = 0;

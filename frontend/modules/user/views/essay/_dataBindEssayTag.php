@@ -11,7 +11,7 @@ use yii\data\ArrayDataProvider;
         'id',
         [
                 'attribute' => 'tag.id',
-                'label' => 'Tag'
+                'label' => Yii::t('app', 'Tag')
             ],
         [
             'class' => 'yii\grid\ActionColumn',

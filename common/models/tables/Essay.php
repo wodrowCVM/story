@@ -20,7 +20,8 @@ class Essay extends BaseEssay
             [['content'], 'string'],
             [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'need_money', 'need_integral', 'need_xp'], 'integer'],
             [['title'], 'string', 'max' => 50],
-            [['desc'], 'string', 'max' => 255]
+            [['desc'], 'string', 'max' => 255],
+            [['title', 'created_by'], 'unique', 'targetAttribute' => ['title', 'created_by'], 'message' => 'The combination of Title and Created By has already been taken.']
         ]);
     }
 	

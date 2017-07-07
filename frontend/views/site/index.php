@@ -206,8 +206,13 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                                         <?= \kartik\icons\Icon::show('magic') ?>小贴士
                                     </div>
                                     <div class="panel-body">
-                                        <p style="text-indent: 2em;height: 6em;"><?=$tips->msg ?></p>
-                                        <span class="pull-right"><small>--<code><?=Yii::$app->user->identity->username ?></code></small></span>
+                                        <?php if(!$tips): ?>
+                                            <p style="text-indent: 2em;height: 6em;">还没有任何提示信息</p>
+                                            <span class="pull-right"><small>--<code><?=Yii::$app->name ?></code></small></span>
+                                        <?php else: ?>
+                                            <p style="text-indent: 2em;height: 6em;"><?=$tips->msg ?></p>
+                                            <span class="pull-right"><small>--<code><?=Yii::$app->user->identity->username ?></code></small></span>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="panel-footer">
                                         <small><?=\yii\helpers\Html::a('刷新', ['/site/index']) ?>页面随机获取小提示</small>

@@ -2,6 +2,7 @@
 
 namespace common\components\rewrite\mootensai\relation;
 
+use common\components\tools\Tools;
 use yii\base\ErrorException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -76,6 +77,7 @@ trait RelationTrait
 
     public function saveAll($skippedRelations = [])
     {
+        Tools::_vp("saveAll", 0, 2);
         /* @var $this ActiveRecord */
         $db = $this->getDb();
         $trans = $db->beginTransaction();
@@ -83,6 +85,7 @@ trait RelationTrait
         try {
             if ($this->save()) {
                 $error = false;
+                $success = true;
                 if (!empty($this->relatedRecords)) {
                     foreach ($this->relatedRecords as $name => $records) {
                         if (in_array($name, $skippedRelations))
@@ -96,38 +99,32 @@ trait RelationTrait
                             if ($AQ->multiple) {
                                 /* @var $relModel ActiveRecord */
                                 $i = 0;
+                                foreach ($records as $k => $v){
+                                    $m = $v;
+                                    foreach ($link as $k1 => $v1) {
+                                        $v->$k1 = $this->$v1;
+//                                        $r = $v::deleteAll([$k1=>$v->$k1]);
+                                        $where = [$k1=>$v->$k1];
+//                                        $success = $r&&$success;
+                                    }
+                                }
+                                $r = $m::deleteAll([$k1=>$v->$k1]);
+                                $success = $r&&$success;
+//                                Tools::_vp($r,0,3);
                                 foreach ($records as $index => $relModel) {
                                     $notDeletedFK = [];
                                     foreach ($link as $key => $value) {
                                         $relModel->$key = $this->$value;
-                                        if ($isManyMany) $notDeletedFK[$key] = $this->$value;
-                                        elseif ($AQ->multiple) $notDeletedFK[$key] = "$key = '{$this->$value}'";
-                                    }
-                                    if ($relModel->isNewRecord) {
-                                        $x = $relModel::findOne($relModel->toArray());
-                                        if ($x) {
-                                            $y = $relModel::deleteAll($relModel->toArray());
-                                            if ($y) {
-                                                $relSave = $relModel->save();
-                                            } else {
-                                                $relSave = 0;
-                                            }
-                                        } else {
-                                            $relSave = $relModel->save();
-                                        }
-                                    } else {
-                                        $x = $relModel::findOne($relModel->toArray());
-                                        if ($x) {
-                                            $y = $relModel::deleteAll($relModel->toArray());
-                                            if ($y) {
-                                                $relSave = $relModel->save();
-                                            } else {
-                                                $relSave = 0;
-                                            }
-                                        } else {
-                                            $relSave = $relModel->save();
+                                        if ($isManyMany) {
+                                            $notDeletedFK[$key] = $this->$value;
+                                        }elseif ($AQ->multiple){
+                                            $notDeletedFK[$key] = "$key = '{$this->$value}'";
                                         }
                                     }
+//                                    Tools::_vp($relModel->toArray(),0,3);
+//                                    Tools::_vp($relModel->isNewRecord,0,3);
+//                                    Tools::_vp($relModel->id,0,3);
+                                    $relSave = $relModel->save();
                                     if (!$relSave || !empty($relModel->errors)) {
                                         $relModelWords = Inflector::camel2words(StringHelper::basename($AQ->modelClass));
                                         $index++;
@@ -200,7 +197,12 @@ trait RelationTrait
                                         $relSave = 0;
                                     }
                                 } else {
-                                    $relSave = $records->save();
+                                    $y = $records::deleteAll($records->toArray());
+                                    if ($y) {
+                                        $relSave = $records->save();
+                                    } else {
+                                        $relSave = 0;
+                                    }
                                 }
 //                                $relSave = $records->save();
                                 if (!$relSave || !empty($records->errors)) {
@@ -220,9 +222,9 @@ trait RelationTrait
                 $relAvail = array_keys($this->relatedRecords);
                 $relData = $this->getRelationData();
                 $allRel = array_keys($relData);
-                $noChildren = array_diff($allRel, $relAvail);
-
-                foreach ($noChildren as $relName) {
+                $noChildrenRel = array_diff($allRel, $relAvail);
+//                var_dump($noChildrenRel);exit;
+                foreach ($noChildrenRel as $relName) {
                     if (in_array($relName, $skippedRelations)) {
                         continue;
                     }
@@ -256,8 +258,7 @@ trait RelationTrait
                         }
                     }
                 }
-
-                if ($error) {
+                if ($error&&!$success) {
                     $trans->rollback();
                     $this->isNewRecord = $isNewRecord;
                     return false;

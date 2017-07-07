@@ -5,7 +5,6 @@ namespace common\models\tables\base;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use mootensai\behaviors\UUIDBehavior;
 
 /**
  * This is the base model class for table "{{%user}}".
@@ -29,6 +28,8 @@ use mootensai\behaviors\UUIDBehavior;
  * @property integer $sex
  * @property string $birthday
  *
+ * @property \common\models\tables\BindEssayTag[] $bindEssayTags
+ * @property \common\models\tables\Essay[] $essays
  * @property \common\models\tables\Tips[] $tips
  * @property \common\models\tables\UserAuthCode[] $userAuthCodes
  * @property \common\models\tables\UserSignin[] $userSignins
@@ -69,25 +70,41 @@ class User extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'username' => 'Username',
-            'auth_key' => 'Auth Key',
-            'password_hash' => 'Password Hash',
-            'password_reset_token' => 'Password Reset Token',
-            'email' => 'Email',
-            'status' => 'Status',
-            'money' => 'Money',
-            'integral' => 'Integral',
-            'xp' => 'Xp',
-            'mobile' => 'Mobile',
-            'nickname' => 'Nickname',
-            'qq' => 'Qq',
-            'weibo' => 'Weibo',
-            'sex' => 'Sex',
-            'birthday' => 'Birthday',
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Username'),
+            'auth_key' => Yii::t('app', 'Auth Key'),
+            'password_hash' => Yii::t('app', 'Password Hash'),
+            'password_reset_token' => Yii::t('app', 'Password Reset Token'),
+            'email' => Yii::t('app', 'Email'),
+            'status' => Yii::t('app', 'Status'),
+            'money' => Yii::t('app', 'Money'),
+            'integral' => Yii::t('app', 'Integral'),
+            'xp' => Yii::t('app', 'Xp'),
+            'mobile' => Yii::t('app', 'Mobile'),
+            'nickname' => Yii::t('app', 'Nickname'),
+            'qq' => Yii::t('app', 'Qq'),
+            'weibo' => Yii::t('app', 'Weibo'),
+            'sex' => Yii::t('app', 'Sex'),
+            'birthday' => Yii::t('app', 'Birthday'),
         ];
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBindEssayTags()
+    {
+        return $this->hasMany(\common\models\tables\BindEssayTag::className(), ['updated_by' => 'id']);
+    }
+        
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEssays()
+    {
+        return $this->hasMany(\common\models\tables\Essay::className(), ['updated_by' => 'id']);
+    }
+        
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -128,10 +145,6 @@ class User extends \yii\db\ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
-            ],
-            'uuid' => [
-                'class' => UUIDBehavior::className(),
-                'column' => 'id',
             ],
         ];
     }

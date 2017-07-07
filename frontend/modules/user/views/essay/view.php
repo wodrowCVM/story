@@ -36,8 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'desc',
-            'type',
-            'status',
+            [
+                'attribute' => 'type',
+                'value' => $model::getType()[$model->type],
+            ],
+            [
+                'attribute' => 'status',
+                'value' => $model::getType()[$model->status],
+            ],
             'need_money',
             'need_integral',
             'need_xp',
@@ -55,10 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
             $gridColumnBindEssayTag = [
                 ['class' => 'yii\grid\SerialColumn'],
                 'id',
-                [
-                    'attribute' => 'tag.id',
-                    'label' => 'Tag'
-                ],
+                'tag.id',
+                'tag.name',
             ];
             echo Gridview::widget([
                 'dataProvider' => $providerBindEssayTag,

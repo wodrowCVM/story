@@ -5,7 +5,6 @@ namespace common\models\tables\base;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use mootensai\behaviors\UUIDBehavior;
 
 /**
  * This is the base model class for table "{{%tag}}".
@@ -85,10 +84,6 @@ class Tag extends \yii\db\ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
-            ],
-            'uuid' => [
-                'class' => UUIDBehavior::className(),
-                'column' => 'id',
             ],
         ];
     }

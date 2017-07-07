@@ -5,7 +5,6 @@ namespace common\models\tables\base;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use mootensai\behaviors\UUIDBehavior;
 
 /**
  * This is the base model class for table "{{%user_signin}}".
@@ -51,10 +50,10 @@ class UserSignin extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'date' => 'Date',
-            'message' => 'Message',
-            'c_days' => 'C Days',
+            'id' => Yii::t('app', 'ID'),
+            'date' => Yii::t('app', 'Date'),
+            'message' => Yii::t('app', 'Message'),
+            'c_days' => Yii::t('app', 'C Days'),
         ];
     }
     
@@ -76,16 +75,12 @@ class UserSignin extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => false,
+                'updatedAtAttribute' => 'updated_at',
             ],
             'blameable' => [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => false,
-            ],
-            'uuid' => [
-                'class' => UUIDBehavior::className(),
-                'column' => 'id',
+                'updatedByAttribute' => 'updated_by',
             ],
         ];
     }

@@ -5,7 +5,6 @@ namespace common\models\tables\base;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use mootensai\behaviors\UUIDBehavior;
 
 /**
  * This is the base model class for table "{{%user_auth_code}}".
@@ -54,11 +53,11 @@ class UserAuthCode extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'code' => 'Code',
-            'bind_user' => 'Bind User',
-            'bind_at' => 'Bind At',
-            'status' => 'Status',
+            'id' => Yii::t('app', 'ID'),
+            'code' => Yii::t('app', 'Code'),
+            'bind_user' => Yii::t('app', 'Bind User'),
+            'bind_at' => Yii::t('app', 'Bind At'),
+            'status' => Yii::t('app', 'Status'),
         ];
     }
     
@@ -102,10 +101,6 @@ class UserAuthCode extends \yii\db\ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => false,
-            ],
-            'uuid' => [
-                'class' => UUIDBehavior::className(),
-                'column' => 'id',
             ],
         ];
     }

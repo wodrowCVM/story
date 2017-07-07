@@ -5,7 +5,6 @@ namespace common\models\tables\base;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use mootensai\behaviors\UUIDBehavior;
 
 /**
  * This is the base model class for table "{{%essay}}".
@@ -25,6 +24,8 @@ use mootensai\behaviors\UUIDBehavior;
  * @property integer $need_xp
  *
  * @property \common\models\tables\BindEssayTag[] $bindEssayTags
+ * @property \common\models\tables\User $createdBy
+ * @property \common\models\tables\User $updatedBy
  */
 class Essay extends \yii\db\ActiveRecord
 {
@@ -40,7 +41,8 @@ class Essay extends \yii\db\ActiveRecord
             [['content'], 'string'],
             [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'need_money', 'need_integral', 'need_xp'], 'integer'],
             [['title'], 'string', 'max' => 50],
-            [['desc'], 'string', 'max' => 255]
+            [['desc'], 'string', 'max' => 255],
+            [['title', 'created_by'], 'unique', 'targetAttribute' => ['title', 'created_by'], 'message' => 'The combination of Title and Created By has already been taken.']
         ];
     }
     
@@ -58,15 +60,15 @@ class Essay extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'desc' => 'Desc',
-            'content' => 'Content',
-            'type' => 'Type',
-            'status' => 'Status',
-            'need_money' => 'Need Money',
-            'need_integral' => 'Need Integral',
-            'need_xp' => 'Need Xp',
+            'id' => Yii::t('app', 'ID'),
+            'title' => Yii::t('app', 'Title'),
+            'desc' => Yii::t('app', 'Desc'),
+            'content' => Yii::t('app', 'Content'),
+            'type' => Yii::t('app', 'Type'),
+            'status' => Yii::t('app', 'Status'),
+            'need_money' => Yii::t('app', 'Need Money'),
+            'need_integral' => Yii::t('app', 'Need Integral'),
+            'need_xp' => Yii::t('app', 'Need Xp'),
         ];
     }
     
@@ -76,6 +78,22 @@ class Essay extends \yii\db\ActiveRecord
     public function getBindEssayTags()
     {
         return $this->hasMany(\common\models\tables\BindEssayTag::className(), ['essay_id' => 'id']);
+    }
+        
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'created_by']);
+    }
+        
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'updated_by']);
     }
     
 /**
@@ -94,10 +112,6 @@ class Essay extends \yii\db\ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
-            ],
-            'uuid' => [
-                'class' => UUIDBehavior::className(),
-                'column' => 'id',
             ],
         ];
     }
