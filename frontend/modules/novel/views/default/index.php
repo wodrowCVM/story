@@ -1,12 +1,14 @@
+<?php
+/**
+ * @var \yii\web\View $this
+ * @var \common\models\Essay[] $essays
+ * @var \yii\data\Pagination $pages
+ */
+$this->title = "小说列表";
+$this->params['breadcrumbs'][] = $this->title;
+?>
 <div class="novel-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+    <div class="wall wall-lg">
+        暂未开通此模块，敬请期待
+    </div>
 </div>
