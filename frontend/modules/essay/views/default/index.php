@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <span style="margin-left: 2em;"></span>
                                             <?=\kartik\icons\Icon::show('calendar') ?> 发布日期: <?=date("Y-m-d", $v->created_at) ?>
                                             <span style="margin-left: 2em;"></span>
-                                            <?=\kartik\icons\Icon::show('comment') ?> 评论: <code>1</code>条
+                                            <?=\kartik\icons\Icon::show('comment') ?> 评论: <code>0</code>条
                                         </small>
                                         <small class="pull-right">
                                             <?=\yii\bootstrap\Html::a('阅读全文', $v->urls['view_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
