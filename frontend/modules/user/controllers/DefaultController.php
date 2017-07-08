@@ -2,6 +2,7 @@
 
 namespace frontend\modules\user\controllers;
 
+use common\models\User;
 use frontend\modules\user\models\ResetPasswordForm;
 use yii\web\Controller;
 
@@ -37,5 +38,25 @@ class DefaultController extends Controller
     public function actionSet()
     {
         return $this->render('set');
+    }
+
+    /**
+     * 个人主页
+     * @param $id
+     * @return string
+     */
+    public function actionUserHome($id)
+    {
+        $this->layout = "@app/views/layouts/main";
+        $user = User::findOne(['id'=>$id]);
+        return $this->render('user-home', [
+            'user' => $user,
+        ]);
+    }
+
+    public function actionUsers()
+    {
+        $this->layout = "@app/views/layouts/main";
+        return $this->render('users');
     }
 }

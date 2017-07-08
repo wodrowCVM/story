@@ -8,4 +8,8 @@ class Config
     public static $adminEmail = "";
     public static $adminQQ = "";
     public static $adminUser = "";
+    public static $appQQGroups = [
+        ['number'=>'12346789', 'status'=>'可加入', 'max'=>200, 'has'=>1],
+        ['number'=>'12346789', 'status'=>'不可加入', 'max'=>200, 'has'=>1],
+    ];
 }

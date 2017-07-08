@@ -249,9 +249,12 @@ class User extends \common\models\tables\User implements IdentityInterface
     public function getUrls()
     {
         $arr = [];
-        $arr['info_arr'] = ['/site/user-home', 'id'=>$this->id];
+        $arr['info_arr'] = ['/user/default/user-home', 'id'=>$this->id];
         $arr['info'] = Url::to($arr['info_arr']);
         $arr['info_show_username'] = Html::a($this->username, $arr['info_arr']);
+        $arr['list_arr'] = ['/user/default/users'];
+        $arr['list'] = Url::to($arr['list_arr']);
+        $arr['list_show_label'] = Html::a('所有用户', $arr['list_arr']);
         return $arr;
     }
 }

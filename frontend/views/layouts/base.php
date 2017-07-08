@@ -75,6 +75,8 @@ AppAsset::register($this);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; <?=Yii::$app->name ?> <?= date('Y') ?></p>
+        <p class="pull-left" style="margin-left: 2em;"></p>
+        <p class="pull-left"><?=Html::a('帮助中心', ['/help']) ?></p>
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>

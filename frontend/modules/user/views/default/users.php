@@ -3,6 +3,6 @@
  * @var \yii\web\View $this
  * @var \common\models\User $user
  */
-$this->title = "个人主页";
+$this->title = "所有用户";
 $this->params['breadcrumbs'][] = $this->title;
 ?>

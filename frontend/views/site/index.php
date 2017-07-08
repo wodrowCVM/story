@@ -29,7 +29,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                             </div>
                         </div>
                     </div>
-                    <a href="#">
+                    <a href="<?=Yii::$app->user->identity->urls['list'] ?>">
                         <div class="panel-footer">
                             <span class="pull-left">查看</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -68,12 +68,12 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                                 <?= \kartik\icons\Icon::show('book', ['class' => 'fa-5x']) ?>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">124</div>
+                                <div class="huge">0</div>
                                 <div>小说数</div>
                             </div>
                         </div>
                     </div>
-                    <a href="#">
+                    <a href="<?=\yii\helpers\Url::to(['/novel']) ?>">
                         <div class="panel-footer">
                             <span class="pull-left">查看</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -90,7 +90,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                                 <?= \kartik\icons\Icon::show('tags', ['class' => 'fa-5x']) ?>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">13</div>
+                                <div class="huge"><?=\common\models\Tag::find()->count() ?></div>
                                 <div>标签数</div>
                             </div>
                         </div>
