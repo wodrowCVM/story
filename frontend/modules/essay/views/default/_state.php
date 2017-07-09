@@ -11,8 +11,8 @@
     <div class="panel-body">
         <div class="list-group">
             <a href="#" class="list-group-item">
-                <i class="fa fa-comment fa-fw"></i> New Comment
-                <span class="pull-right text-muted small"><em>4 minutes ago</em></span>
+                <?=\kartik\icons\Icon::show('circle-thin') ?> 我的创作
+                <span class="pull-right text-muted small"><em><code><?=\common\models\Essay::find()->where(['created_by'=>Yii::$app->user->id])->count() ?></code></em></span>
             </a>
         </div>
         <!-- /.list-group -->

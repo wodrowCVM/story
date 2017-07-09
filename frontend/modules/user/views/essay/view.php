@@ -47,6 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'need_money',
             'need_integral',
             'need_xp',
+            [
+                'label' => '标签',
+                'value' => $model->tagsShow,
+                'format' => 'raw',
+            ],
         ];
         echo DetailView::widget([
             'model' => $model,
@@ -54,10 +59,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
         ?>
     </div>
-
+    <div class="row">
+        <?=$model->content ?>
+    </div>
     <div class="row">
         <?php
-        if ($providerBindEssayTag->totalCount) {
+        /*if ($providerBindEssayTag->totalCount) {
             $gridColumnBindEssayTag = [
                 ['class' => 'yii\grid\SerialColumn'],
                 'id',
@@ -69,13 +76,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pjax' => true,
                 'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container-bind-essay-tag']],
                 'panel' => [
-                    'type' => GridView::TYPE_PRIMARY,
-                    'heading' => '<span class="glyphicon glyphicon-book"></span> ' . Html::encode('Bind Essay Tag'),
+                    'type' => GridView::TYPE_DEFAULT,
+                    'heading' => '<span class="glyphicon glyphicon-book"></span> ' . Html::encode('标签'),
+                    'options' => [
+                        'class' => 'hidden',
+                    ],
+                    'class' => 'hidden',
                 ],
-                'columns' => $gridColumnBindEssayTag
+                'columns' => $gridColumnBindEssayTag,
             ]);
-        }
+        }*/
         ?>
-        <?=$model->content ?>
     </div>
 </div>

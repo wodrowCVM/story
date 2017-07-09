@@ -95,4 +95,13 @@ class Essay extends \common\models\tables\Essay
     {
         return $this->hasOne(\common\models\User::className(), ['id' => 'updated_by']);
     }
+
+    public function getTagsShow()
+    {
+        $str = '';
+        foreach ($this->bindEssayTags as $k => $v){
+            $str .= $v->tag->urls['search_items_show_name'];
+        }
+        return $str;
+    }
 }

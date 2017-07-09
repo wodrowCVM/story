@@ -9,12 +9,15 @@
 namespace common\models;
 
 use common\components\rewrite\mootensai\relation\RelationTrait;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * Class Tag
  * @package common\models
  *
  * @property \common\models\BindEssayTag[] $bindEssayTags
+ * @property array $urls
  */
 class Tag extends \common\models\tables\Tag
 {
@@ -78,5 +81,17 @@ class Tag extends \common\models\tables\Tag
     public function getBindEssayTags()
     {
         return $this->hasMany(\common\models\BindEssayTag::className(), ['tag_id' => 'id']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getUrls()
+    {
+        $arr = [];
+        $arr['search_items_arr'] = ['/tag/search'];
+        $arr['search_items'] = Url::to($arr['search_items_arr']);
+        $arr['search_items_show_name'] = Html::a($this->name, $arr['search_items'], ['style' => ['margin-right'=>'1em'], 'class'=>"btn btn-default btn-xs"]);
+        return $arr;
     }
 }
