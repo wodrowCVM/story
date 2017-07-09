@@ -46,7 +46,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                                 <?= \kartik\icons\Icon::show('file', ['class' => 'fa-5x']) ?>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">12</div>
+                                <div class="huge"><?=\common\models\Essay::find()->where(['status'=>\common\models\Essay::STATUS_ACTIVE])->count() ?></div>
                                 <div>随笔数</div>
                             </div>
                         </div>

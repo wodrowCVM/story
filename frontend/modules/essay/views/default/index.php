@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php if($v->isYouBuy){ ?>
                                                 <?=\yii\bootstrap\Html::a('阅读', $v->urls['view_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
                                             <?php }else{ ?>
-                                                <?=\yii\bootstrap\Html::a('获取', $v->urls['view_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
+                                                <?=\yii\bootstrap\Html::a('获取', $v->urls['buy_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
                                             <?php }; ?>
                                             <?=$v->canAdmin?\yii\bootstrap\Html::a('修改', $v->urls['update_arr'], ['class'=>"btn btn-default btn-xs"]):'' ?>
                                         </small>

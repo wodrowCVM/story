@@ -2,6 +2,7 @@
 
 namespace frontend\modules\user\controllers;
 
+use common\models\UserEssay;
 use Yii;
 use frontend\modules\user\models\Essay;
 use frontend\modules\user\models\EssaySearch;
@@ -154,5 +155,21 @@ class EssayController extends Controller
     public function actionGetBuy()
     {
         return $this->render('get-buy');
+    }
+
+    public function actionBuy($id)
+    {
+        $essay = \common\models\Essay::findOne(['id'=>$id]);
+        $user_essay = UserEssay::findOne(['essay_id'=>$essay->id, 'created_by' => Yii::$app->user->id]);
+        if ($user_essay){
+            Yii::$app->session->setFlash('info', "你已经拥有此随笔!");
+            $this->redirect($essay->urls['view_arr']);
+        }else{
+            $user_essay = new UserEssay();
+        }
+        return $this->render('buy', [
+            'essay' => $essay,
+            'user_essay' => $user_essay,
+        ]);
     }
 }

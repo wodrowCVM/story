@@ -34,8 +34,8 @@ use yii\widgets\ActiveForm;
         ],
     ]) ?>
     <?= $form->field($model, 'type')->dropDownList($model::getType()) ?>
-    <?= $form->field($model, 'status')->dropDownList($model::getStatus()) ?>
-    <?= $form->field($model, 'need_money')->textInput(['placeholder' => '获取随笔需要扣除的金币']) ?>
+    <?= Yii::$app->user->isAdmin?$form->field($model, 'status')->dropDownList($model::getStatus()):'' ?>
+    <?= Yii::$app->user->isAdmin?$form->field($model, 'need_money')->textInput(['placeholder' => '获取随笔需要扣除的金币']):'' ?>
     <?= $form->field($model, 'need_integral')->textInput(['placeholder' => '获取随笔需要扣除的积分']) ?>
     <?= $form->field($model, 'need_xp')->textInput(['placeholder' => '需要达到的经验值']) ?>
     <?php

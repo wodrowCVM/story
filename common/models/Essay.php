@@ -81,6 +81,7 @@ class Essay extends \common\models\tables\Essay
         $arr['view_arr'] = ['/essay/default/view', 'id'=>$this->id];
         $arr['update_arr'] = ['/user/essay/update', 'id'=>$this->id];
         $arr['list_arr'] = ['/essay/default/index'];
+        $arr['buy_arr'] = ['/user/essay/buy', 'id'=>$this->id];
         return $arr;
     }
 
