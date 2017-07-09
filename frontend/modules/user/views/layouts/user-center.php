@@ -7,7 +7,7 @@ $this->beginContent('@frontend/views/layouts/base.php');
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-4">
-                <?=\kartik\sidenav\SideNav::widget([
+                <?=\common\components\rewrite\kartik\widgets\SideNav::widget([
                     'type' => \kartik\sidenav\SideNav::TYPE_DEFAULT,
                     'heading' => '菜单',
                     'items' => [

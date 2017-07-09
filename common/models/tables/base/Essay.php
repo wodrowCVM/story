@@ -26,6 +26,7 @@ use yii\behaviors\BlameableBehavior;
  * @property \common\models\tables\BindEssayTag[] $bindEssayTags
  * @property \common\models\tables\User $createdBy
  * @property \common\models\tables\User $updatedBy
+ * @property \common\models\tables\UserEssay[] $userEssays
  */
 class Essay extends \yii\db\ActiveRecord
 {
@@ -94,6 +95,14 @@ class Essay extends \yii\db\ActiveRecord
     public function getUpdatedBy()
     {
         return $this->hasOne(\common\models\tables\User::className(), ['id' => 'updated_by']);
+    }
+        
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserEssays()
+    {
+        return $this->hasMany(\common\models\tables\UserEssay::className(), ['essay_id' => 'id']);
     }
     
 /**

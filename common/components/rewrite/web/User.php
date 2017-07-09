@@ -16,5 +16,5 @@ namespace common\components\rewrite\web;
  */
 class User extends \yii\web\User
 {
-
+    public $isAdmin;
 }

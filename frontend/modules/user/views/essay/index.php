@@ -13,9 +13,10 @@ $this->params['breadcrumbs'][] = ['label' => '个人中心', 'url' => ['/user']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="essay-index">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
     <p>
         <?= Html::a('创建随笔', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('已获取的随笔', ['get-buy'], ['class' => 'btn btn-info']) ?>
     </p>
     <?php 
     $gridColumn = [
@@ -53,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{view} {update} {delete} {link}',
             'buttons' => [
                 'link' => function($url, $model, $key){
-                    return \yii\helpers\Html::a(\kartik\icons\Icon::show('link'), ['/user', 'id'=>$key], [
+                    return \yii\helpers\Html::a(\kartik\icons\Icon::show('link'), $model->urls['view_arr'], [
                         'class' => 'data-view',
                         'data-id' => $key,
                         'title' => '在前台查看',
@@ -61,6 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
         ],
+//        'createdBy.username',
     ]; 
     ?>
     <?= GridView::widget([

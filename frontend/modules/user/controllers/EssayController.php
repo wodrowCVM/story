@@ -23,19 +23,6 @@ class EssayController extends Controller
                     'delete' => ['post'],
                 ],
             ],
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'add-bind-essay-tag'],
-                        'roles' => ['@']
-                    ],
-                    [
-                        'allow' => false
-                    ]
-                ]
-            ]
         ];
     }
 
@@ -46,7 +33,9 @@ class EssayController extends Controller
     public function actionIndex()
     {
         $searchModel = new EssaySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->created_by = Yii::$app->user->id;
+        $params = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -132,9 +121,13 @@ class EssayController extends Controller
     protected function findModel($id)
     {
         if (($model = Essay::findOne($id)) !== null) {
-            return $model;
+            if ($model->canAdmin){
+                return $model;
+            }else{
+                throw new NotFoundHttpException(Yii::t('app', '你无权处理。'));
+            }
         } else {
-            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+            throw new NotFoundHttpException(Yii::t('app', '没有找到随笔。'));
         }
     }
     
@@ -156,5 +149,10 @@ class EssayController extends Controller
         } else {
             throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
+    }
+
+    public function actionGetBuy()
+    {
+        return $this->render('get-buy');
     }
 }

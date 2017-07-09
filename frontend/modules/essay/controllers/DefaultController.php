@@ -26,7 +26,6 @@ class DefaultController extends Controller
         $essays = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
-
         return $this->render('index', [
             'essays' => $essays,
             'pages' => $pages,

@@ -19,6 +19,9 @@ use common\components\rewrite\mootensai\relation\RelationTrait;
  * @property array $urls
  * @property \common\models\User $createdBy
  * @property \common\models\User $updatedBy
+ * @property string $tagsShow
+ * @property bool $canAdmin
+ * @property bool $isYouBuy
  */
 class Essay extends \common\models\tables\Essay
 {
@@ -76,6 +79,7 @@ class Essay extends \common\models\tables\Essay
     {
         $arr = [];
         $arr['view_arr'] = ['/essay/default/view', 'id'=>$this->id];
+        $arr['update_arr'] = ['/user/essay/update', 'id'=>$this->id];
         $arr['list_arr'] = ['/essay/default/index'];
         return $arr;
     }
@@ -96,6 +100,25 @@ class Essay extends \common\models\tables\Essay
         return $this->hasOne(\common\models\User::className(), ['id' => 'updated_by']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserEssays()
+    {
+        return $this->hasMany(\common\models\tables\UserEssay::className(), ['essay_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBies()
+    {
+        return $this->hasMany(User::className(), ['id' => 'created_by'])->viaTable('{{%user_essay}}', ['essay_id' => 'id']);
+    }
+
+    /**
+     * @return string
+     */
     public function getTagsShow()
     {
         $str = '';
@@ -103,5 +126,29 @@ class Essay extends \common\models\tables\Essay
             $str .= $v->tag->urls['search_items_show_name'];
         }
         return $str;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCanAdmin()
+    {
+        if (\Yii::$app->user->isAdmin){
+            return true;
+        }
+        if ($this->created_by == \Yii::$app->user->id){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function getIsYouBuy()
+    {
+        if (UserEssay::findOne(['created_by'=>\Yii::$app->user->id, 'essay_id'=>$this->id, 'status'=>self::STATUS_ACTIVE])){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
