@@ -3,6 +3,7 @@ use kartik\detail\DetailView;
 /**
  * @var \yii\web\View $this
  * @var \common\models\Essay $essay
+ * @var \common\models\UserEssay $user_essay
  */
 $this->title = "获取随笔--".$essay->title;
 $this->params['breadcrumbs'][] = ['label' => '随笔列表', 'url' => $essay->urls['list_arr']];
@@ -87,6 +88,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]
             ]); ?>
+        </div>
+        <div class="col-sm-12">
+            <?php $form = \kartik\form\ActiveForm::begin() ?>
+            <?php echo $form->field($user_essay, 'id')->hiddenInput()->label(false) ?>
+            <?=\kartik\helpers\Html::submitButton('获取', ['class'=>'btn btn-primary']) ?>
+            <?php \kartik\form\ActiveForm::end() ?>
         </div>
     </div>
 </div>

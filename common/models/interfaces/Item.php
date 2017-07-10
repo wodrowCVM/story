@@ -8,7 +8,15 @@
 
 namespace common\models\interfaces;
 
+use common\models\User;
 
+/**
+ * Interface Item
+ * @package common\models\interfaces
+ *
+ * @property User $createdBy
+ * @property User $updatedBy
+ */
 interface Item
 {
 //    public static function getListUrl();

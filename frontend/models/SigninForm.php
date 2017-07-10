@@ -66,10 +66,10 @@ class SigninForm extends Model
                     $ts->c_days = $yesterdaySignin->c_days+1;
                 }
                 if ($ts->save()){
-                    $trans->commit();
+//                    $trans->commit();
 //                    \Yii::$app->session->setFlash("success", "签到成功，你已经连续签到{$ts->c_days}天。");
                 }else{
-                    $trans->rollBack();
+//                    $trans->rollBack();
                     \Yii::$app->session->setFlash("error", "签到失败");
                 }
             }catch (ErrorException $e){

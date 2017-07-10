@@ -2,10 +2,12 @@
 
 namespace frontend\modules\user\controllers;
 
+use common\components\tools\Tools;
 use common\models\UserEssay;
 use Yii;
 use frontend\modules\user\models\Essay;
 use frontend\modules\user\models\EssaySearch;
+use yii\base\ErrorException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -69,7 +71,6 @@ class EssayController extends Controller
     public function actionCreate()
     {
         $model = new Essay();
-
         if ($model->loadAll(Yii::$app->request->post()) && $model->saveAll()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -159,13 +160,35 @@ class EssayController extends Controller
 
     public function actionBuy($id)
     {
-        $essay = \common\models\Essay::findOne(['id'=>$id]);
+        $essay = \common\models\Essay::findOne(['id'=>$id, 'status'=>Essay::STATUS_ACTIVE]);
         $user_essay = UserEssay::findOne(['essay_id'=>$essay->id, 'created_by' => Yii::$app->user->id]);
         if ($user_essay){
             Yii::$app->session->setFlash('info', "你已经拥有此随笔!");
-            $this->redirect($essay->urls['view_arr']);
+            return $this->redirect($essay->urls['view_arr']);
         }else{
             $user_essay = new UserEssay();
+            $user_essay->essay_id = $essay->id;
+            $user_essay->status = UserEssay::STATUS_ACTIVE;
+            $user_essay->buy_log = json_encode([
+                'essay'=>$essay->toArray()
+            ]);
+        }
+        if ($user_essay->load(Yii::$app->request->post())&&$user_essay->validate()){
+//            Yii::$app->session->setFlash('success', "获取成功!");
+            $trans = Yii::$app->db->beginTransaction();
+            try{
+                $x = $user_essay->save();
+                $trans->commit();
+            }catch (ErrorException $e){
+                $trans->rollBack();
+                throw $e;
+            }
+            if ($x){
+                return $this->redirect($essay->urls['view_arr']);
+            }
+        }else{
+//            Yii::$app->session->setFlash('error', "获取失败!");
+//            return $this->goBack();
         }
         return $this->render('buy', [
             'essay' => $essay,
