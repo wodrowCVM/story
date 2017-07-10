@@ -40,10 +40,10 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'suffix' => '.html',
+//            'suffix' => '.html',
             'rules' => [
 //                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-//                '<controller:\w+>/<action:\w+>.html'=>'<controller>/<action>',
+                '<controller:\w+>/<action:\w+>.html'=>'<controller>/<action>',
             ],
         ],
     ],

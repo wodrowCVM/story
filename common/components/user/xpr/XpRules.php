@@ -28,6 +28,7 @@ class XpRules extends Component
     const RULE_CREATE_ESSAY = 'create_essay';
     const RULE_SIGNIN = 'signin';
     const RULE_BUY_ESSAY = 'buy_essay';
+    const RULE_ESSAY_REPLY = 'essay_reply';
 
     public static function getRuleInfos()
     {
@@ -48,6 +49,12 @@ class XpRules extends Component
             ],
             self::RULE_BUY_ESSAY => [
                 'name' => '获取随笔',
+            ],
+            self::RULE_ESSAY_REPLY => [
+                'name' => "回复随笔",
+                'xp' => 1,
+                'integral' => 0,
+                'money' => 0,
             ],
         ];
     }
@@ -103,6 +110,9 @@ class XpRules extends Component
                 break;
             case self::RULE_BUY_ESSAY:
                 return $this->buyEssay();
+                break;
+            case self::RULE_ESSAY_REPLY:
+                return $this->essayReply();
                 break;
             default:
                 throw new ErrorException('没有找到规则名', 1113);
@@ -176,6 +186,21 @@ class XpRules extends Component
                 $user->money = $user->money + $this->item->need_money;
                 return false;
             }
+        }
+    }
+
+    public function essayReply()
+    {
+        $ruleInfo = $this->getRuleInfo();
+        $this->user->integral = $this->user->integral + $ruleInfo['integral'];
+        $this->user->xp = $this->user->xp + $ruleInfo['xp'];
+        $this->user->money = $this->user->money + $ruleInfo['money'];
+        $x = $this->user->save();
+        if ($x){
+            \Yii::$app->session->setFlash('success', "回复成功，获取经验值{$ruleInfo['xp']}，积分{$ruleInfo['integral']}，金币{$ruleInfo['money']}。");
+            return $x;
+        }else{
+            return false;
         }
     }
 }

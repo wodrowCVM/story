@@ -28,7 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <span style="margin-left: 2em;"></span>
                                             <?=\kartik\icons\Icon::show('calendar') ?> 发布日期: <?=date("Y-m-d", $v->created_at) ?>
                                             <span style="margin-left: 2em;"></span>
-                                            <?=\kartik\icons\Icon::show('comment') ?> 评论: <code>0</code>条
+                                            <?=\kartik\icons\Icon::show('comment') ?> 评论: <code><?=\common\models\EssayReply::find()->where(['essay_id'=>$v->id, 'status'=>$v::STATUS_ACTIVE])->count() ?></code>条
+                                            <?php if(!$v->isYouBuy&&$v->created_by!=Yii::$app->user->id): ?>
+                                                <span style="margin-left: 2em;"></span>
+                                                <?=\kartik\icons\Icon::show('money') ?> 需求:金币<code><?=$v->need_money ?></code>;积分<code><?=$v->need_integral ?></code>;经验值<code><?=$v->need_xp?></code>
+                                            <?php endif; ?>
                                         </small>
                                         <small class="pull-right">
                                             <?php if($v->isYouBuy||$v->created_by==Yii::$app->user->id){ ?>
