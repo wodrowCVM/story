@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\components\user\xpr\XpRules;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -25,6 +26,7 @@ use yii\web\IdentityInterface;
  *
  * @property UserAuthCode[] $userAuthCodes
  * @property array $urls
+ * @property XpRules $xps
  */
 class User extends \common\models\tables\User implements IdentityInterface
 {
@@ -256,5 +258,36 @@ class User extends \common\models\tables\User implements IdentityInterface
         $arr['list'] = Url::to($arr['list_arr']);
         $arr['list_show_label'] = Html::a('所有用户', $arr['list_arr']);
         return $arr;
+    }
+
+    /**
+     * @return XpRules $xps
+     */
+    public function getXps()
+    {
+        $xps = New XpRules();
+        $xps->user = $this;
+        return $xps;
+    }
+
+    public function beforeSave($insert)
+    {
+        if(parent::beforeSave($insert)){
+            if ($this->xp < 0){
+                Yii::$app->session->setFlash('error', '经验值必须为大于0的整数!');
+                return false;
+            }
+            if ($this->money < 0){
+                Yii::$app->session->setFlash('error', '金币不足!');
+                return false;
+            }
+            if ($this->integral < 0){
+                Yii::$app->session->setFlash('error', '积分不足!');
+                return false;
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
 }

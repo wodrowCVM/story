@@ -8,6 +8,7 @@
 
 namespace frontend\models;
 
+use common\components\user\xpr\XpRules;
 use common\models\UserSignin;
 use yii\base\ErrorException;
 use yii\base\Model;
@@ -66,7 +67,7 @@ class SigninForm extends Model
                 }
                 if ($ts->save()){
                     $trans->commit();
-                    \Yii::$app->session->setFlash("success", "签到成功，你已经连续签到".$ts->c_days."天，获取积分");
+//                    \Yii::$app->session->setFlash("success", "签到成功，你已经连续签到{$ts->c_days}天。");
                 }else{
                     $trans->rollBack();
                     \Yii::$app->session->setFlash("error", "签到失败");

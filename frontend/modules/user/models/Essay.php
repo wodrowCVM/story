@@ -32,7 +32,7 @@ class Essay extends \common\models\Essay
 
     public function onlyOneForUser($attribute, $params)
     {
-        if (!$this->hasErrors()){
+        if (!$this->hasErrors()&&$this->isNewRecord){
             $x = self::findOne(['title'=>$this->title, 'created_by'=>\Yii::$app->user->id]);
             if ($x){
                 $this->addError($attribute, "你已经创建过该标题的文档!");

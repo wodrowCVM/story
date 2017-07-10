@@ -13,4 +13,6 @@ interface Item
 {
 //    public static function getListUrl();
 //    public function getUrl();
+    public function getCreatedBy();
+    public function getUpdatedBy();
 }

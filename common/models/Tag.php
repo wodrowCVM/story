@@ -9,6 +9,7 @@
 namespace common\models;
 
 use common\components\rewrite\mootensai\relation\RelationTrait;
+use common\models\interfaces\Item;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -18,8 +19,10 @@ use yii\helpers\Url;
  *
  * @property \common\models\BindEssayTag[] $bindEssayTags
  * @property array $urls
+ * @property \common\models\tables\User $createdBy
+ * @property \common\models\tables\User $updatedBy
  */
-class Tag extends \common\models\tables\Tag
+class Tag extends \common\models\tables\Tag implements Item
 {
     use RelationTrait;
 
@@ -93,5 +96,21 @@ class Tag extends \common\models\tables\Tag
         $arr['search_items'] = Url::to($arr['search_items_arr']);
         $arr['search_items_show_name'] = Html::a($this->name, $arr['search_items'], ['style' => ['margin-right'=>'1em'], 'class'=>"btn btn-default btn-xs"]);
         return $arr;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(\common\models\tables\User::className(), ['id' => 'updated_by']);
     }
 }
