@@ -8,6 +8,7 @@ use Yii;
 use frontend\modules\user\models\Essay;
 use frontend\modules\user\models\EssaySearch;
 use yii\base\ErrorException;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -155,7 +156,19 @@ class EssayController extends Controller
 
     public function actionGetBuy()
     {
-        return $this->render('get-buy');
+        $query = UserEssay::find()->orderBy(['created_at'=>SORT_DESC])->where(['created_by'=>Yii::$app->user->id]);
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => 10,
+        ]);
+        $user_essays = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return $this->render('get-buy', [
+            'user_essays' => $user_essays,
+            'pages' => $pages,
+        ]);
     }
 
     public function actionBuy($id)
