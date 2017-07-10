@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?=\kartik\icons\Icon::show('comment') ?> 评论: <code>0</code>条
                                         </small>
                                         <small class="pull-right">
-                                            <?php if($v->isYouBuy){ ?>
+                                            <?php if($v->isYouBuy||$v->created_by==Yii::$app->user->id){ ?>
                                                 <?=\yii\bootstrap\Html::a('阅读', $v->urls['view_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
                                             <?php }else{ ?>
                                                 <?=\yii\bootstrap\Html::a('获取', $v->urls['buy_arr'], ['class'=>"btn btn-default btn-xs"]) ?>

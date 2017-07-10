@@ -266,7 +266,7 @@ class User extends \common\models\tables\User implements IdentityInterface
     public function getXps()
     {
         $xps = New XpRules();
-        $xps->user = $this;
+        $xps->setUser($this);
         return $xps;
     }
 

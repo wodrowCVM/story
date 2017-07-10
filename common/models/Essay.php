@@ -50,6 +50,39 @@ class Essay extends \common\models\tables\Essay implements Item
         ];
     }
 
+    public function rules()
+    {
+        return [
+            [['title', 'desc'], 'trim'],
+            [['title', 'content'], 'required'],
+            [['content'], 'string'],
+            [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'need_money', 'need_integral', 'need_xp'], 'integer'],
+            [['title'], 'string', 'max' => 50],
+            [['desc'], 'string', 'max' => 255],
+            [['need_money', 'need_integral', 'need_xp'], 'default', 'value' => 0],
+            ['title', 'onlyOneForUser'],
+            [['title', 'created_by'], 'unique', 'targetAttribute' => ['title', 'created_by'], 'message' => 'The combination of Title and Created By has already been taken.'],
+            [['need_integral', 'need_xp'], 'max1000'],
+        ];
+    }
+
+    public function max1000($attribute, $params)
+    {
+        if (!$this->hasErrors()&&$this->isNewRecord&&$this->$attribute>1000){
+            $this->addError($attribute, '你能设置的最大值为1000');
+        }
+    }
+
+    public function onlyOneForUser($attribute, $params)
+    {
+        if (!$this->hasErrors()&&$this->isNewRecord){
+            $x = self::findOne(['title'=>$this->title, 'created_by'=>\Yii::$app->user->id]);
+            if ($x){
+                $this->addError($attribute, "你已经创建过该标题的文档!");
+            }
+        }
+    }
+
     public function attributeLabels()
     {
         return [
@@ -77,16 +110,6 @@ class Essay extends \common\models\tables\Essay implements Item
         return $this->hasMany(\common\models\BindEssayTag::className(), ['essay_id' => 'id']);
     }
 
-    public function getUrls()
-    {
-        $arr = [];
-        $arr['view_arr'] = ['/essay/default/view', 'id'=>$this->id];
-        $arr['update_arr'] = ['/user/essay/update', 'id'=>$this->id];
-        $arr['list_arr'] = ['/essay/default/index'];
-        $arr['buy_arr'] = ['/user/essay/buy', 'id'=>$this->id];
-        return $arr;
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -101,6 +124,16 @@ class Essay extends \common\models\tables\Essay implements Item
     public function getUpdatedBy()
     {
         return $this->hasOne(\common\models\User::className(), ['id' => 'updated_by']);
+    }
+
+    public function getUrls()
+    {
+        $arr = [];
+        $arr['view_arr'] = ['/essay/default/view', 'id'=>$this->id];
+        $arr['update_arr'] = ['/user/essay/update', 'id'=>$this->id];
+        $arr['list_arr'] = ['/essay/default/index'];
+        $arr['buy_arr'] = ['/user/essay/buy', 'id'=>$this->id];
+        return $arr;
     }
 
     /**

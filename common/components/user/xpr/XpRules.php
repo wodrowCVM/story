@@ -27,6 +27,7 @@ class XpRules extends Component
 {
     const RULE_CREATE_ESSAY = 'create_essay';
     const RULE_SIGNIN = 'signin';
+    const RULE_BUY_ESSAY = 'buy_essay';
 
     public static function getRuleInfos()
     {
@@ -45,6 +46,9 @@ class XpRules extends Component
                 'integral' => 5,
                 'money' => 0,
             ],
+            self::RULE_BUY_ESSAY=>[
+                'name' => '获取随笔',
+            ],
         ];
     }
 
@@ -55,6 +59,18 @@ class XpRules extends Component
     public function setRule($rule)
     {
         $this->rule = $rule;
+        return $this;
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function setItem($item)
+    {
+        $this->user = $item;
         return $this;
     }
 
