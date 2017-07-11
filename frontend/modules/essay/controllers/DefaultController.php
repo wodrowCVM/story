@@ -44,10 +44,12 @@ class DefaultController extends Controller
 //            throw new ErrorException("没有找到随笔！", 1013);
             return $this->goBack();
         }
-        if (!\Yii::$app->user->isAdmin&&!UserEssay::findOne(['essay_id'=>$essay->id, 'created_by'=>\Yii::$app->user->id])){
-            \Yii::$app->session->setFlash("error", "请先获取随笔！");
-            return $this->redirect($essay->urls['buy_arr']);
+        if (\Yii::$app->user->id == $essay->created_by){}else{
+            if (!\Yii::$app->user->isAdmin&&!UserEssay::findOne(['essay_id'=>$essay->id, 'created_by'=>\Yii::$app->user->id])){
+                \Yii::$app->session->setFlash("error", "请先获取随笔！");
+                return $this->redirect($essay->urls['buy_arr']);
 //            throw new ErrorException("请先获取随笔！", 1014);
+            }
         }
         $query = EssayReply::find()->orderBy(['created_at'=>SORT_DESC])->where(['essay_id'=>$essay->id]);
         $countQuery = clone $query;
