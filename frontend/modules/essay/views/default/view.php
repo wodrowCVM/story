@@ -17,50 +17,55 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-sm-12">
                     <?= $essay->content ?>
                 </div>
+                <div style="margin-top: 4em;"></div>
                 <div class="col-sm-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            回复列表
-                        </div>
-                        <div class="panel-body">
-                            <div class="items">
-                                <div class="row">
-                                    <?php foreach($essay_replys as $k => $v): ?>
-                                        <div class="col-sm-12 item-list">
-                                            <div class="panel panel-default">
-                                                <div class="panel-body">
-                                                    <div class="item-body">
-                                                        <p><?=$v->content ?></p>
-                                                    </div>
-                                                    <div class="item-foot">
-                                                        <small>
-                                                            <?=\kartik\icons\Icon::show('user') ?> 回复者: <?=$v->createdBy->urls['info_show_username'] ?>
-                                                            <span style="margin-left: 2em;"></span>
-                                                            <?=\kartik\icons\Icon::show('calendar') ?> 回复日期: <?=date("Y-m-d", $v->created_at) ?>
-                                                        </small>
+                    <?php if ($essay_replys): ?>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                回复列表
+                            </div>
+                            <div class="panel-body">
+                                <div class="items">
+                                    <div class="row">
+                                        <?php foreach ($essay_replys as $k => $v): ?>
+                                            <div class="col-sm-12 item-list">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="item-body">
+                                                            <p><?= $v->content ?></p>
+                                                        </div>
+                                                        <div class="item-foot">
+                                                            <small>
+                                                                <?= \kartik\icons\Icon::show('user') ?>
+                                                                回复者: <?= $v->createdBy->urls['info_show_username'] ?>
+                                                                <span style="margin-left: 2em;"></span>
+                                                                <?= \kartik\icons\Icon::show('calendar') ?>
+                                                                回复日期: <?= date("Y-m-d", $v->created_at) ?>
+                                                            </small>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    <?php endforeach; ?>
+                                        <?php endforeach; ?>
+                                    </div>
                                 </div>
                             </div>
+                            <?php if ($pages->totalCount > $pages->pageSize): ?>
+                                <div class="panel-footer">
+                                    <div class="pages">
+                                        <?= \yii\widgets\LinkPager::widget([
+                                            'pagination' => $pages,
+                                            'firstPageLabel' => '首页',
+                                            'lastPageLabel' => '尾页',
+                                            'prevPageLabel' => '上一页',
+                                            'nextPageLabel' => '下一页',
+                                            'maxButtonCount' => 10, //控制每页显示的页数
+                                        ]) ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                        <?php if ($pages->totalCount > $pages->pageSize): ?>
-                            <div class="panel-footer">
-                                <div class="pages">
-                                    <?= \yii\widgets\LinkPager::widget([
-                                        'pagination' => $pages,
-                                        'firstPageLabel' => '首页',
-                                        'lastPageLabel' => '尾页',
-                                        'prevPageLabel' => '上一页',
-                                        'nextPageLabel' => '下一页',
-                                        'maxButtonCount' => 10, //控制每页显示的页数
-                                    ]) ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                    <?php endif; ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             回复

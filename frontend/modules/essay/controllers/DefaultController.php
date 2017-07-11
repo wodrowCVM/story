@@ -68,6 +68,7 @@ class DefaultController extends Controller
                 $x = $essay_reply_form->save();
                 if ($x){
                     $trans->commit();
+                    return $this->redirect($essay->urls['view_arr']);
                 }else{}
             }catch (ErrorException $e){
                 $trans->rollBack();

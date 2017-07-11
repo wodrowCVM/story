@@ -9,6 +9,7 @@
 namespace frontend\modules\essay;
 
 
+use common\models\Essay;
 use common\models\EssayReply;
 use yii\base\Model;
 
@@ -40,12 +41,14 @@ class EssayReplyForm extends Model
 
     public function save()
     {
+        $essay = Essay::findOne($this->essay_id);
         $essay_reply = new EssayReply();
-        $essay_reply->essay_id = $this->essay_id;
+        $essay_reply->essay_id = $essay->id;
         $essay_reply->content = $this->content;
         $essay_reply->status = $essay_reply::STATUS_ACTIVE;
         $x = $essay_reply->save();
         if ($x){
+            $essay->trigger($essay::EVENT_ESSAY_REPLY);
             return $x;
         }else{
             return false;

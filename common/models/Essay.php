@@ -34,6 +34,7 @@ class Essay extends \common\models\tables\Essay implements Item
     const STATUS_ACTIVE = 10;
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
+    const EVENT_ESSAY_REPLY = 'event_essay_reply';
 
     public static function getType()
     {
@@ -49,6 +50,12 @@ class Essay extends \common\models\tables\Essay implements Item
             self::STATUS_DELETED => '已删除',
             self::STATUS_INACTIVE => '未激活',
         ];
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->on(self::EVENT_ESSAY_REPLY, [$this, 'eventEssayReply']);
     }
 
     public function rules()
@@ -69,8 +76,17 @@ class Essay extends \common\models\tables\Essay implements Item
 
     public function max1000($attribute, $params)
     {
-        if (!$this->hasErrors()&&$this->isNewRecord&&$this->$attribute>1000){
-            $this->addError($attribute, '你能设置的最大值为1000');
+        if (!$this->getErrors()){
+            if (\Yii::$app->user->isAdmin){}else{
+                if ($this->isNewRecord&&$this->$attribute>1000){
+                    $this->addError($attribute, '你能设置的最大值为1000');
+                }
+                if (!$this->isNewRecord&&$this->$attribute>1000){
+                    if ($this->oldAttributes[$attribute]!=$this->$attribute){
+                        $this->addError($attribute, '你能设置的最大值为1000');
+                    }
+                }
+            }
         }
     }
 
@@ -186,6 +202,18 @@ class Essay extends \common\models\tables\Essay implements Item
             return true;
         }else{
             return false;
+        }
+    }
+
+    public function eventEssayReply()
+    {
+        $user_alert = new UserAlert();
+        $user_alert->title = "你的随笔[{$this->title}]有新的回复";
+        $user_alert->to_user = $this->created_by;
+        $user_alert->item_type = \common\components\nav\Item::TYPE_ESSAY;
+        $user_alert->status = $user_alert::STATUS_UNREAD;
+        if ($user_alert->save()){}else{
+            throw new ErrorException("提醒保存异常", 1026);
         }
     }
 

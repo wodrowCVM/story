@@ -42,6 +42,14 @@ AppAsset::register($this);
         $rightItems[] = ['label' => '注册', 'url' => ['/site/signup']];
         $rightItems[] = ['label' => '登录', 'url' => ['/site/login']];
     } else {
+        $user_alert = new \common\models\UserAlert();
+        $notifyCount = $user_alert::find()->where(['to_user'=>Yii::$app->user->id, 'status'=>$user_alert::STATUS_UNREAD])->count();
+        $rightItems[] = [
+            'label' => Html::tag('i', '', ['class' => 'fa fa-bell']) . Html::tag('span', $notifyCount ? $notifyCount : null),
+            'url' => $user_alert->urls['list'],
+            'linkOptions' => ['class' => $notifyCount ? 'new' : null],
+            'options' => ['class' => 'notification-count'],
+        ];
         $rightItems[] = [
             'label' => Yii::$app->user->identity->username,
             'items' => [
