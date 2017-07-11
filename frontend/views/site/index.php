@@ -264,6 +264,9 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
         </div>
         <div class="row">
             <div class="col-lg-12">
+                <?php
+                $tags = \common\models\Tag::find()->limit(20)->all();
+                ?>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <?= \kartik\icons\Icon::show('tag') ?>热门标签
@@ -272,11 +275,9 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                         </span>
                     </div>
                     <div class="panel-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae
-                            ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                    </div>
-                    <div class="panel-footer">
-                        Panel Footer
+                        <?php foreach($tags as $k => $v): ?>
+                            <?=\yii\helpers\Html::a($v->name, $v->urls['search_items_arr'], ['class'=>"btn btn-default btn-xs"]) ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>

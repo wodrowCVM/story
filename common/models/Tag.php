@@ -92,7 +92,8 @@ class Tag extends \common\models\tables\Tag implements Item
     public function getUrls()
     {
         $arr = [];
-        $arr['search_items_arr'] = ['/tag/search', 'id'=>$this->id];
+        $arr['list_arr'] = ['/tag'];
+        $arr['search_items_arr'] = ['/tag/default/search', 'id'=>$this->id];
         $arr['search_items'] = Url::to($arr['search_items_arr']);
         $arr['search_items_show_name'] = Html::a($this->name, $arr['search_items'], ['style' => ['margin-right'=>'1em'], 'class'=>"btn btn-default btn-xs"]);
         return $arr;

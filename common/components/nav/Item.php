@@ -14,4 +14,11 @@ use yii\base\Component;
 class Item extends Component
 {
     const TYPE_ESSAY = 10;
+
+    public static function getType()
+    {
+        return [
+            self::TYPE_ESSAY => '随笔',
+        ];
+    }
 }
