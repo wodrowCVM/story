@@ -95,7 +95,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                             </div>
                         </div>
                     </div>
-                    <a href="#">
+                    <a href="<?=\yii\helpers\Url::to(['/tag']) ?>">
                         <div class="panel-footer">
                             <span class="pull-left">查看</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -155,29 +155,31 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="flot-chart">
+                            <?php
+                                $c_tag = \common\models\Tag::find()->where(['created_by'=>Yii::$app->user->id])->count();
+                                $c_essay = \common\models\Essay::find()->where(['created_by'=>Yii::$app->user->id])->count();
+                                $c_essay_reply = \common\models\EssayReply::find()->where(['created_by'=>Yii::$app->user->id])->count();
+                                $c_signin = \common\models\UserSignin::find()->where(['created_by'=>Yii::$app->user->id])->count();
+                            ?>
                             <?= \dosamigos\chartjs\ChartJs::widget([
                                 'type' => 'bar',
                                 'data' => [
-                                    'labels' => ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                                    'labels' => ["标签数", "随笔数", "随笔回复数", "总签到次数"],
                                     'datasets' => [
                                         [
-                                            'label' => '# of Votes',
-                                            'data' => [12, 19, 3, 5, 2, 3],
+                                            'label' => false,
+                                            'data' => [$c_tag, $c_essay, $c_essay_reply, $c_signin],
                                             'backgroundColor' => [
                                                 'rgba(255, 99, 132, 0.2)',
                                                 'rgba(54, 162, 235, 0.2)',
                                                 'rgba(255, 206, 86, 0.2)',
-                                                'rgba(75, 192, 192, 0.2)',
-                                                'rgba(153, 102, 255, 0.2)',
-                                                'rgba(255, 159, 64, 0.2)'
+                                                'rgba(75, 192, 192, 0.2)'
                                             ],
                                             'borderColor' => [
                                                 'rgba(255,99,132,1)',
                                                 'rgba(54, 162, 235, 1)',
                                                 'rgba(255, 206, 86, 1)',
-                                                'rgba(75, 192, 192, 1)',
-                                                'rgba(153, 102, 255, 1)',
-                                                'rgba(255, 159, 64, 1)'
+                                                'rgba(75, 192, 192, 1)'
                                             ],
                                             'borderWidth' => 1
                                         ]
