@@ -20,6 +20,7 @@ use yii\behaviors\BlameableBehavior;
  * @property integer $updated_at
  * @property integer $to_user
  * @property integer $item_type
+ * @property integer $item_id
  *
  * @property \common\models\tables\User $createdBy
  * @property \common\models\tables\User $toUser
@@ -35,8 +36,8 @@ class UserAlert extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_by', 'created_at', 'title', 'updated_by', 'updated_at', 'to_user'], 'required'],
-            [['created_by', 'created_at', 'status', 'updated_by', 'updated_at', 'to_user', 'item_type'], 'integer'],
+            [['created_by', 'created_at', 'title', 'updated_by', 'updated_at', 'to_user', 'item_id'], 'required'],
+            [['created_by', 'created_at', 'status', 'updated_by', 'updated_at', 'to_user', 'item_type', 'item_id'], 'integer'],
             [['content', 'other_data'], 'string'],
             [['title'], 'string', 'max' => 200]
         ];
@@ -63,6 +64,7 @@ class UserAlert extends \yii\db\ActiveRecord
             'other_data' => Yii::t('app', 'Other Data'),
             'to_user' => Yii::t('app', 'To User'),
             'item_type' => Yii::t('app', 'Item Type'),
+            'item_id' => Yii::t('app', 'Item ID'),
         ];
     }
     

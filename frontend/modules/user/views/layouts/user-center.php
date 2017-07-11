@@ -31,6 +31,11 @@ $this->beginContent('@frontend/views/layouts/base.php');
                             'label' => '小说管理',
                             'icon' => 'book'
                         ],
+                        [
+                            'url' => ['/user/alert/index'],
+                            'label' => '我的提醒',
+                            'icon' => 'bell'
+                        ],
                         /*[
                             'label' => 'Help',
                             'icon' => 'question-sign',

@@ -242,24 +242,20 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                             </div>
                         </div>
                         <div class="list-group">
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-comment fa-fw"></i> New Comment
-                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                            <?php
+                            $user_alert = new \common\models\UserAlert();
+                            $user_alerts = $user_alert::find()->where(['to_user'=>Yii::$app->user->id, 'status'=>$user_alert::STATUS_UNREAD])->limit(10)->all();
+                            ?>
+                            <?php foreach($user_alerts as $k => $v): ?>
+                                <a href="<?=$v->urls['view'] ?>" class="list-group-item">
+                                    <i class="fa fa-bell fa-fw"></i> <?=$v->title ?>
+                                        <span class="pull-right text-muted small"><em><?=date("Y-m-d H:i:s", $v->created_at) ?></em>
                                     </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-comment fa-fw"></i> New Comment
-                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <i class="fa fa-comment fa-fw"></i> New Comment
-                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                            </a>
+                                </a>
+                            <?php endforeach; ?>
                         </div>
                         <!-- /.list-group -->
-                        <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                        <a href="<?=$user_alert->urls['list'] ?>" class="btn btn-default btn-block">查看所有提醒</a>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -284,7 +280,7 @@ $tips = \common\models\Tips::find()->orderBy('RAND()')->one();
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-12 hidden">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <?= \kartik\icons\Icon::show('tag') ?>常见问题

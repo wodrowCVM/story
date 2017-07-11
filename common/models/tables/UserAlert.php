@@ -16,8 +16,8 @@ class UserAlert extends BaseUserAlert
     {
         return array_replace_recursive(parent::rules(),
 	    [
-            [['created_by', 'created_at', 'title', 'updated_by', 'updated_at', 'to_user'], 'required'],
-            [['created_by', 'created_at', 'status', 'updated_by', 'updated_at', 'to_user', 'item_type'], 'integer'],
+            [['created_by', 'created_at', 'title', 'updated_by', 'updated_at', 'to_user', 'item_id'], 'required'],
+            [['created_by', 'created_at', 'status', 'updated_by', 'updated_at', 'to_user', 'item_type', 'item_id'], 'integer'],
             [['content', 'other_data'], 'string'],
             [['title'], 'string', 'max' => 200]
         ]);

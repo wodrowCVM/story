@@ -8,6 +8,7 @@
 
 namespace common\models;
 
+use common\components\nav\Item;
 use yii\helpers\Url;
 
 /**
@@ -43,8 +44,13 @@ class UserAlert extends \common\models\tables\UserAlert
     {
         $arr = [];
         $arr['view_arr'] = ['/user/alert/to-link', 'id'=>$this->id];
+        $arr['view'] = Url::to($arr['view_arr']);
         $arr['list_arr'] = ['/user/alert/index'];
-        $arr['list'] = Url::to(['/user/alert/index']);
+        $arr['list'] = Url::to($arr['list_arr']);
+        if ($this->item_type==Item::TYPE_ESSAY){
+            $essay = Essay::findOne($this->item_id);
+            $arr['item_arr'] = $essay->urls['view_arr'];
+        }
         return $arr;
     }
 }

@@ -211,6 +211,7 @@ class Essay extends \common\models\tables\Essay implements Item
         $user_alert->title = "你的随笔[{$this->title}]有新的回复";
         $user_alert->to_user = $this->created_by;
         $user_alert->item_type = \common\components\nav\Item::TYPE_ESSAY;
+        $user_alert->item_id = $this->id;
         $user_alert->status = $user_alert::STATUS_UNREAD;
         if ($user_alert->save()){}else{
             throw new ErrorException("提醒保存异常", 1026);
