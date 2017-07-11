@@ -51,6 +51,9 @@ return [
         'user' => [
             'class' => 'frontend\modules\user\UserModule',
         ],
+        'tag' => [ // 标签
+            'class' => 'frontend\modules\tag\TagModule',
+        ],
         'essay' => [ // 随笔
             'class' => 'frontend\modules\essay\EssayModule',
         ],

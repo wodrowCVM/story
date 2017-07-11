@@ -26,11 +26,11 @@ $this->beginContent('@frontend/views/layouts/base.php');
                             'label' => '随笔管理',
                             'icon' => 'file'
                         ],
-                        [
+                        /*[
                             'url' => ['/user/novel/index'],
                             'label' => '小说管理',
                             'icon' => 'book'
-                        ],
+                        ],*/
                         [
                             'url' => ['/user/alert/index'],
                             'label' => '我的提醒',
