@@ -318,7 +318,7 @@ trait RelationTrait
         }
     }
 
-    public function deleteWithRelated()
+    public function deleteWithRelated($skippedRelations = [])
     {
         /* @var $this ActiveRecord */
         $db = $this->getDb();
